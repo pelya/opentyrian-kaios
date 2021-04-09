@@ -16,7 +16,7 @@ WITH_NETWORK := false
 
 SHELL = /bin/sh
 
-CC ?= gcc
+CC ?= clang
 INSTALL ?= install
 PKG_CONFIG ?= pkg-config
 
@@ -66,11 +66,26 @@ CFLAGS ?= -pedantic \
           -Wall \
           -Wextra \
           -Wno-missing-field-initializers \
-          -O2
-LDFLAGS ?=
+          -Werror=format \
+          -Werror=format-security \
+          -Werror=format-nonliteral \
+          -Oz -flto
+LDFLAGS ?= -Oz -flto
 LDLIBS ?=
 
-ifeq ($(WITH_NETWORK), true)
+ifneq ($(EMSCRIPTEN),)
+    SDL_CPPFLAGS := -s USE_SDL=2 \
+                    -s WASM=0 \
+                    -s ALLOW_MEMORY_GROWTH=1 \
+                    -s INITIAL_MEMORY=8388608 \
+                    -s NO_EXIT_RUNTIME=1 \
+                    -s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
+                    -s FORCE_FILESYSTEM=1 \
+                    -s ASSERTIONS=0 \
+                    --preload-file data@data
+    SDL_LDFLAGS := $(SDL_CPPFLAGS)
+    SDL_LDLIBS :=
+else ifeq ($(WITH_NETWORK), true)
     SDL_CPPFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --cflags)
     SDL_LDFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --libs-only-L --libs-only-other)
     SDL_LDLIBS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --libs-only-l)
@@ -85,8 +100,13 @@ ALL_CPPFLAGS = -DTARGET_$(PLATFORM) \
                $(EXTRA_CPPFLAGS) \
                $(SDL_CPPFLAGS) \
                $(CPPFLAGS)
+ifneq ($(EMSCRIPTEN),)
+ALL_CFLAGS = -std=gnu99 \
+             $(CFLAGS)
+else
 ALL_CFLAGS = -std=iso9899:1999 \
              $(CFLAGS)
+endif
 ALL_LDFLAGS = $(SDL_LDFLAGS) \
               $(LDFLAGS)
 ALL_LDLIBS = -lm \
@@ -100,9 +120,11 @@ all : $(TARGET)
 
 .PHONY : debug
 debug : CPPFLAGS += -UNDEBUG
-debug : CFLAGS += -Werror
 debug : CFLAGS += -O0
 debug : CFLAGS += -g3
+ifneq ($(EMSCRIPTEN),)
+debug : CFLAGS += -s ASSERTIONS=2 # -O0 -g -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
+endif
 debug : all
 
 .PHONY : installdirs
