@@ -30,6 +30,10 @@
 
 #include "sys_kaios.h"
 
+#pragma GCC diagnostic ignored "-Wdollar-in-identifier-extension"
+#pragma GCC diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
+#pragma GCC diagnostic ignored "-Wgnu-statement-expression"
+#pragma GCC diagnostic ignored "-Wc11-extensions"
 
 static int fs_initialized = 0;
 
