@@ -1,0 +1,36 @@
+{
+  "name": "opentyrian",
+  "short_name": "OpenTyrian",
+  "version": "2.1.0",
+  "description": "Arcade-style vertical scrolling shooter, with story mode and weapon upgrades. Source code: https://github.com/pelya/opentyrian-kaios",
+  "subtitle": "Vertical scrolling shooter",
+  "locales": {
+    "en-US": {
+      "name": "OpenTyrian",
+      "description": "Arcade-style vertical scrolling shooter, with story mode and weapon upgrades. Source code: https://github.com/pelya/opentyrian-kaios",
+      "subtitle": "Vertical scrolling shooter"
+    }
+  },
+  "default_locale": "en-US",
+  "launch_path": "/index.html",
+  "icons": {
+    "56": "/icon_56.png",
+    "112": "/icon_112.png"
+  },
+  "theme_color": "#90FF00",
+  "developer": {
+    "name": "pelya",
+    "url": "https://github.com/pelya/opentyrian-kaios"
+  },
+  "origin": "app://opentyrian",
+  "type": "web",
+  "permissions": {
+    "mobiledata":{},
+    "wifidata":{}
+  },
+  "fullscreen": "true",
+  "categories": [ "games" ],
+  "default_locale": "en-US",
+  "orientation": [ "landscape-primary" ],
+  "precompile": [ "kaiads.v4.min.js", "sys.js", "app.js" ]
+}
