@@ -34,6 +34,7 @@
 #pragma GCC diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 #pragma GCC diagnostic ignored "-Wgnu-statement-expression"
 #pragma GCC diagnostic ignored "-Wc11-extensions"
+#pragma GCC diagnostic ignored "-Winvalid-pp-token"
 
 static int fs_initialized = 0;
 
@@ -128,6 +129,45 @@ void sys_free_wake_lock(void)
 		if (sys_screen_wake_lock !== null) {
 			sys_screen_wake_lock.unlock();
 			sys_screen_wake_lock = null;
+		}
+	});
+#endif // EMSCRIPTEN
+}
+
+void sys_exit_app(void)
+{
+#ifdef EMSCRIPTEN
+	//EM_ASM( window.open('', '_self').close(); );
+	EM_ASM({
+		var sys_shutdown_anim = 100;
+		setInterval(function() {
+			if (sys_fs_sync_is_done) {
+				window.open('', '_self').close();
+			}
+			if (sys_shutdown_anim > 0) {
+				sys_shutdown_anim -= 20;
+			}
+			document.getElementById('canvas').style.height = String(sys_shutdown_anim) + '%';
+			document.getElementById('canvas').style.marginTop = String((100 - sys_shutdown_anim) / 2) + '%';
+		}, 20);
+	});
+#endif // EMSCRIPTEN
+	exit(0);
+}
+
+void sys_hide_splash_image(void)
+{
+#ifdef EMSCRIPTEN
+	EM_ASM( sys_hide_splash_image(); );
+#endif // EMSCRIPTEN
+}
+
+extern void sys_show_fullscreen_advertisement(void)
+{
+#ifdef EMSCRIPTEN
+	EM_ASM({
+		if (sys_preloaded_advertisement !== false) {
+			sys_preloaded_advertisement.call('display');
 		}
 	});
 #endif // EMSCRIPTEN
