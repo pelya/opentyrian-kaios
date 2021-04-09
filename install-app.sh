@@ -4,9 +4,9 @@
 
 FOLDER="$1"
 [ -z "$FOLDER" ] && FOLDER=debug
-ID=OpenTyrian
+ID=opentyrian
 
-adb push ${FOLDER}/$ID.zip /data/local/tmp/b2g/$ID/application.zip  || exit 1
+adb push ${FOLDER}/OpenTyrian.zip /data/local/tmp/b2g/$ID/application.zip  || exit 1
 
 cd make-kaios-install
 
