@@ -44,6 +44,7 @@ uint scaler;
 const struct Scalers scalers[] =
 {
 	{ 1 * vga_width, 1 * vga_height, nn_16,      nn_32,      "None" },
+#if 0
 	{ 2 * vga_width, 2 * vga_height, nn_16,      nn_32,      "2x" },
 	{ 2 * vga_width, 2 * vga_height, scale2x_16, scale2x_32, "Scale2x" },
 	{ 2 * vga_width, 2 * vga_height, NULL,       hq2x_32,    "hq2x" },
@@ -52,6 +53,7 @@ const struct Scalers scalers[] =
 	{ 3 * vga_width, 3 * vga_height, NULL,       hq3x_32,    "hq3x" },
 	{ 4 * vga_width, 4 * vga_height, nn_16,      nn_32,      "4x" },
 	{ 4 * vga_width, 4 * vga_height, NULL,       hq4x_32,    "hq4x" },
+#endif // if 0
 };
 const uint scalers_count = COUNTOF(scalers);
 
@@ -81,7 +83,7 @@ void nn_32( SDL_Surface *src_surface, SDL_Texture *dst_texture )
 	
 	const int height = vga_height, // src_surface->h
 	          width = vga_width,   // src_surface->w
-	          scale = dst_width / width;
+	          scale = 1; // = dst_width / width;
 	assert(scale == dst_height / height);
 
 	void* tmp_ptr;
@@ -130,7 +132,7 @@ void nn_16( SDL_Surface *src_surface, SDL_Texture *dst_texture )
 	
 	const int height = vga_height, // src_surface->h
 	          width = vga_width,   // src_surface->w
-	          scale = dst_width / width;
+	          scale = 1; // = dst_width / width;
 	assert(scale == dst_height / height);
 
 	void* tmp_ptr;

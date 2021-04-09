@@ -24,6 +24,8 @@
 
 #include <stdlib.h>
 
+#if 0
+
 void interp1(Uint32 *pc, Uint32 c1, Uint32 c2);
 void interp2(Uint32 *pc, Uint32 c1, Uint32 c2, Uint32 c3);
 void interp3(Uint32 *pc, Uint32 c1, Uint32 c2);
@@ -11914,3 +11916,5 @@ void hq4x_32( SDL_Surface *src_surface, SDL_Texture *dst_texture )
 
 	SDL_UnlockTexture(dst_texture);
 }
+
+#endif // if 0

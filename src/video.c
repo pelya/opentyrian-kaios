@@ -146,7 +146,7 @@ static void init_texture( void )
 {
 	assert(main_window_renderer != NULL);
 
-	int bpp = 32; // TODOSDL2
+	int bpp = 16; // TODOSDL2
 	Uint32 format = bpp == 32 ? SDL_PIXELFORMAT_RGB888 : SDL_PIXELFORMAT_RGB565;
 	int scaler_w = scalers[scaler].width;
 	int scaler_h = scalers[scaler].height;

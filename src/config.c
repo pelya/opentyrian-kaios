@@ -250,7 +250,7 @@ bool load_opentyrian_config( void )
 {
 	// defaults
 	fullscreen_display = -1;
-	set_scaler_by_name("Scale2x");
+	set_scaler_by_name("None");
 	
 	Config *config = &opentyrian_config;
 	
