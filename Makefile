@@ -8,7 +8,7 @@ else
     TYRIAN_DIR = $(gamesdir)/tyrian
 endif
 
-WITH_NETWORK := true
+WITH_NETWORK := false
 
 ################################################################################
 
