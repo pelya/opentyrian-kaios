@@ -1,5 +1,11 @@
 #/data/
 
+/app.data
+/app.js
+/app.js.mem
+/debug
+/release
+
 opentyrian.cfg
 tyrian.cfg
 tyrian.sav
