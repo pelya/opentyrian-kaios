@@ -106,16 +106,11 @@ With Emscripten, your main loop should not block anywhere - do not call sleep() 
 
 Use emscripten_set_main_loop() to call your main loop function after you initialized video and everything else
 
-Use following code to close the app:
+Use sys_exit_app() to close the app.
+if you simply call exit(0) the app won't clear it's state and will show black screen on the next launch.
 
-    EM_ASM( window.open('', '_self').close(); );
-
-If you don't call it, splash image is hidden automatically in 10 seconds.
-if you simply call exit(0) the app won't clear it's state and will show black screen on the next launch
-
-After calling SDL_CreateWindow(), call following code to hide splash image.
-
-    EM_ASM( sys_hide_splash_image(); );
+After calling SDL_CreateWindow(), call sys_hide_splash_image() to hide splash image.
+If you don't call it, the splash image is hidden automatically in 10 seconds.
 
 To write data to files that will not be deleted after you close the app, you have to mount a writable file system,
 and sync it after writing to file.
@@ -159,20 +154,12 @@ and developers need to go to KaiAds page to access the app install and usage sta
 
 If apps aren't monetized, KaiStore team would mark it a low priority and the QA might be delayed.
 
-To show a fullscreen advertisement, add following code to some part of your app,
-it should be accessible from somewhere in the app, like settings dialog:
+To show a fullscreen advertisement, call sys_show_fullscreen_advertisement(),
+it should be accessible from somewhere in the app, like settings dialog.
 
-    EM_ASM( if (sys_preloaded_advertisement !== false) sys_preloaded_advertisement.call('display'); );
+You will also need to modify publisher ID and app name in app/sys.js in getKaiAd().
 
-Netplay will likely never be added.
-Mormally UDP sockets are only available as WebRTC API in the web browser,
-which wraps UDP data into DTLS/SRTP/SCTP protocols,
-so the connection between two phones on the same WiFi is easy, but hosting dedicated servers
-will require some kind of WebRTC proxy on top of UDP, so existing server cannot be used.
-
-On top of this, Chocolate Doom does not have any online server browser in the game itself,
-you launch SETUP.EXE, select the server from the list, and then it launches DOOM.EXE.
-So for KaiOS, two apps will need to be distributed in the same package.
+Netplay will likely never be added. WebRTC is hard.
 
 There is supposed to be a hidden API to use UDP sockets directly on KaiOS, without WebRTC wrappers:
 
@@ -180,6 +167,6 @@ https://www.w3.org/TR/tcp-udp-sockets/
 
 https://developer.mozilla.org/en-US/docs/Archive/B2G_OS/API/UDPSocket
 
-It requires privileged app permissions.
+It requires the app type to be set to "privileged" in manifest.webapp.
 Privileged app cannot contain Javascript code embedded into HTML directly,
 you must use <script src="..."> everywhere, the embedded Javascript won't be executed.
