@@ -96,7 +96,7 @@ function sys_hide_splash_image() {
 setTimeout(function() { sys_hide_splash_image(); }, 10000);
 
 setTimeout(function() {
-  // KaiAds only used for collecting usage statistics, it will not show an actual ad
+  // KaiAds integration
   if (typeof getKaiAd === 'function') {
     getKaiAd({
       publisher: '9c9550ad-6e58-4e5a-be78-c209bc42736f',
