@@ -43,6 +43,9 @@ gamesdir ?= $(datadir)/games
 ###
 
 TARGET := opentyrian
+ifneq ($(EMSCRIPTEN),)
+TARGET := app.js
+endif
 
 SRCS := $(wildcard src/*.c)
 OBJS := $(SRCS:src/%.c=obj/%.o)
@@ -119,11 +122,10 @@ ALL_LDLIBS = -lm \
 all : $(TARGET)
 
 .PHONY : debug
-debug : CPPFLAGS += -UNDEBUG
-debug : CFLAGS += -O0
-debug : CFLAGS += -g3
+debug : CPPFLAGS += -UNDEBUG -O0 -g -fno-lto
+debug : LDFLAGS += -O0 -g -fno-lto
 ifneq ($(EMSCRIPTEN),)
-debug : CFLAGS += -s ASSERTIONS=2 # -O0 -g -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
+debug : CFLAGS += -s ASSERTIONS=2 # -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
 endif
 debug : all
 
