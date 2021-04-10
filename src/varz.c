@@ -33,6 +33,7 @@
 #include "opentyr.h"
 #include "shots.h"
 #include "sprite.h"
+#include "sys_kaios.h"
 #include "vga256d.h"
 #include "video.h"
 
@@ -445,6 +446,18 @@ void JE_drawOptionLevel( void )
 
 void JE_tyrianHalt( JE_byte code )
 {
+	if (code != 9)
+	{
+		/*
+		TODO?
+		JE_drawANSI("exitmsg.bin");
+		JE_gotoXY(1,22);*/
+
+		JE_saveConfiguration();
+	}
+
+	sys_exit_app();
+
 	deinit_audio();
 	deinit_video();
 	deinit_joysticks();
@@ -458,16 +471,6 @@ void JE_tyrianHalt( JE_byte code )
 	for (int i = 0; i < SAMPLE_COUNT; i++)
 	{
 		free(digiFx[i]);
-	}
-
-	if (code != 9)
-	{
-		/*
-		TODO?
-		JE_drawANSI("exitmsg.bin");
-		JE_gotoXY(1,22);*/
-
-		JE_saveConfiguration();
 	}
 
 	/* endkeyboard; */

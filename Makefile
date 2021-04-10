@@ -76,6 +76,8 @@ CFLAGS ?= -pedantic \
           -Werror=format \
           -Werror=format-security \
           -Werror=format-nonliteral \
+          -Werror=implicit-function-declaration \
+          -Wunused-result \
           -Oz -flto
 LDFLAGS ?= -Oz -flto
 LDLIBS ?=

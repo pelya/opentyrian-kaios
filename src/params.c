@@ -40,7 +40,7 @@ const char pars[][9] = {
 	"LOOT", "RECORD", "NOJOY", "CONSTANT", "DEATH", "NOSOUND", "NOXMAS", "YESXMAS"
 };
 
-void JE_paramCheck( int argc, char *argv[] )
+void JE_paramCheck( int argc, const char *argv[] )
 {
 	const Options options[] =
 	{
@@ -222,8 +222,8 @@ void JE_paramCheck( int argc, char *argv[] )
 	// legacy parameter support
 	for (int i = option.argn; i < argc; ++i)
 	{
-		for (uint j = 0; j < strlen(argv[i]); ++j)
-			argv[i][j] = toupper((unsigned char)argv[i][j]);
+		//for (uint j = 0; j < strlen(argv[i]); ++j)
+		//	argv[i][j] = toupper((unsigned char)argv[i][j]);
 		
 		for (uint j = 0; j < COUNTOF(pars); ++j)
 		{

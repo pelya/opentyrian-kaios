@@ -72,11 +72,10 @@ int delaycount2( void )
 	return (SDL_GetTicks() < target2 ? target2 - SDL_GetTicks() : 0);
 }
 
-void wait_delay( void )
+bool wait_delay( void )
 {
 	Sint32 delay = target - SDL_GetTicks();
-	if (delay > 0)
-		SDL_Delay(delay);
+	return (delay <= 0);
 }
 
 void service_wait_delay( void )
@@ -88,15 +87,15 @@ void service_wait_delay( void )
 	}
 }
 
-void wait_delayorinput( JE_boolean keyboard, JE_boolean mouse, JE_boolean joystick )
+bool wait_delayorinput( JE_boolean keyboard, JE_boolean mouse, JE_boolean joystick )
 {
-	service_SDL_events(true);
-	while (SDL_GetTicks() < target && !((keyboard && keydown) || (mouse && mousedown) || (joystick && joydown)))
+	if (wait_delay())
 	{
-		SDL_Delay(SDL_GetTicks() - target > SDL_POLL_INTERVAL ? SDL_POLL_INTERVAL : SDL_GetTicks() - target);
-		push_joysticks_as_keyboard();
-		service_SDL_events(false);
+		return true;
 	}
+
+	service_SDL_events(true);
+	return (keyboard && keydown) || (mouse && mousedown) || (joystick && joydown);
 }
 
 void JE_loadSndFile( const char *effects_sndfile, const char *voices_sndfile )

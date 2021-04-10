@@ -47,9 +47,9 @@ void setjasondelay2( int delay );
 int delaycount( void );
 int delaycount2( void );
 
-void wait_delay( void );
+bool wait_delay( void ) __attribute__((warn_unused_result));
 void service_wait_delay( void );
-void wait_delayorinput( JE_boolean keyboard, JE_boolean mouse, JE_boolean joystick );
+bool wait_delayorinput( JE_boolean keyboard, JE_boolean mouse, JE_boolean joystick ) __attribute__((warn_unused_result));
 
 void JE_resetTimerInt( void );
 void JE_setTimerInt( void );

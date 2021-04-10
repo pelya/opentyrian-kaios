@@ -27,7 +27,7 @@
 #ifdef EMSCRIPTEN
 #define FS_WRITE_MOUNT_POINT "/save"
 #else
-#define FS_WRITE_MOUNT_POINT "."
+#define FS_WRITE_MOUNT_POINT "./save"
 #endif
 
 // On KaiOS IndexedDB refuses to save files bigger than 16 Mb

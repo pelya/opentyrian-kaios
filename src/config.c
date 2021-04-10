@@ -26,6 +26,7 @@
 #include "nortsong.h"
 #include "opentyr.h"
 #include "player.h"
+#include "sys_kaios.h"
 #include "varz.h"
 #include "vga256d.h"
 #include "video.h"
@@ -747,6 +748,8 @@ void JE_decryptSaveTemp( void )
 
 const char *get_user_directory( void )
 {
+	return FS_WRITE_MOUNT_POINT;
+
 	static char user_dir[500] = "";
 	
 	if (strlen(user_dir) == 0)
@@ -1067,5 +1070,6 @@ void JE_saveConfiguration( void )
 	}
 	
 	save_opentyrian_config();
+	sys_fs_sync();
 }
 

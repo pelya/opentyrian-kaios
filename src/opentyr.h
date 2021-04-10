@@ -53,6 +53,12 @@ typedef float  JE_real;
 
 #define TYRIAN_VERSION "2.1"
 
+#ifdef NDEBUG
+#define diag(X, ...)
+#else
+#define diag(X, ...) printf("%s:%d: " X "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
+#endif
+
 extern const char *opentyrian_str;
 extern const char *opentyrian_version;
 
