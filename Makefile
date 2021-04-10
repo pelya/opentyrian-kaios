@@ -17,6 +17,10 @@ WITH_NETWORK := false
 SHELL = /bin/sh
 
 CC ?= clang
+ifeq ($(CC), cc)
+CC := clang
+endif
+
 INSTALL ?= install
 PKG_CONFIG ?= pkg-config
 
@@ -122,7 +126,8 @@ ALL_LDLIBS = -lm \
 all : $(TARGET)
 
 .PHONY : debug
-debug : CPPFLAGS += -UNDEBUG -O0 -g -fno-lto
+debug : CPPFLAGS += -UNDEBUG
+debug : CFLAGS += -O0 -g -fno-lto
 debug : LDFLAGS += -O0 -g -fno-lto
 ifneq ($(EMSCRIPTEN),)
 debug : CFLAGS += -s ASSERTIONS=2 # -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
