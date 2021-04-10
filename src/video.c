@@ -21,6 +21,7 @@
 #include "keyboard.h"
 #include "opentyr.h"
 #include "palette.h"
+#include "sys_kaios.h"
 #include "video_scale.h"
 
 #include <assert.h>
@@ -65,6 +66,8 @@ void init_video( void )
 {
 	if (SDL_WasInit(SDL_INIT_VIDEO))
 		return;
+
+	sys_hide_splash_image();
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) == -1)
 	{

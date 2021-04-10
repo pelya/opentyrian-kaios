@@ -47,13 +47,15 @@ gamesdir ?= $(datadir)/games
 ###
 
 TARGET := opentyrian
+OBJDIR := obj
 ifneq ($(EMSCRIPTEN),)
 TARGET := app.js
+OBJDIR := obj-js
 endif
 
 SRCS := $(wildcard src/*.c)
-OBJS := $(SRCS:src/%.c=obj/%.o)
-DEPS := $(SRCS:src/%.c=obj/%.d)
+OBJS := $(SRCS:src/%.c=$(OBJDIR)/%.o)
+DEPS := $(SRCS:src/%.c=$(OBJDIR)/%.d)
 
 ###
 
@@ -78,6 +80,7 @@ CFLAGS ?= -pedantic \
           -Werror=format-nonliteral \
           -Werror=implicit-function-declaration \
           -Wunused-result \
+          -Wno-gnu-zero-variadic-macro-arguments \
           -Oz -flto
 LDFLAGS ?= -Oz -flto
 LDLIBS ?=
@@ -93,7 +96,7 @@ ifneq ($(EMSCRIPTEN),)
                     -s ASSERTIONS=0 \
                     --preload-file data@data
     SDL_LDFLAGS := $(SDL_CPPFLAGS)
-    SDL_LDLIBS :=
+    SDL_LDLIBS := -lidbfs.js
 else ifeq ($(WITH_NETWORK), true)
     SDL_CPPFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --cflags)
     SDL_LDFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --libs-only-L --libs-only-other)
@@ -165,6 +168,6 @@ $(TARGET) : $(OBJS)
 
 -include $(DEPS)
 
-obj/%.o : src/%.c
+$(OBJDIR)/%.o : src/%.c
 	@mkdir -p "$(dir $@)"
 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c -o $@ $<

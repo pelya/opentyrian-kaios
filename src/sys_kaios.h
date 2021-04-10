@@ -25,6 +25,10 @@
 #define __SYS_KAIOS__
 
 #ifdef EMSCRIPTEN
+#include "emscripten.h"
+#endif
+
+#ifdef EMSCRIPTEN
 #define FS_WRITE_MOUNT_POINT "/save"
 #else
 #define FS_WRITE_MOUNT_POINT "./save"

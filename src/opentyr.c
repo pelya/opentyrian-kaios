@@ -478,6 +478,7 @@ int opentyr_main( int argc, const char *argv[] )
 	}
 
 #ifdef EMSCRIPTEN
+	emscripten_cancel_main_loop();
 	emscripten_set_main_loop(opentyr_game_loop, 0, 0);
 #else // EMSCRIPTEN
 	for (; ; )
