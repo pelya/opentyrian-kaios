@@ -137,6 +137,8 @@ void sys_free_wake_lock(void)
 void sys_exit_app(void)
 {
 #ifdef EMSCRIPTEN
+	// Do not call main loop anymore, and throw an exception to simulate program termination
+	emscripten_cancel_main_loop();
 	//EM_ASM( window.open('', '_self').close(); );
 	EM_ASM({
 		var sys_shutdown_anim = 100;
@@ -150,6 +152,7 @@ void sys_exit_app(void)
 			document.getElementById('canvas').style.height = String(sys_shutdown_anim) + '%';
 			document.getElementById('canvas').style.marginTop = String((100 - sys_shutdown_anim) / 2) + '%';
 		}, 20);
+		throw new Error('App exit requested');
 	});
 #endif // EMSCRIPTEN
 	exit(0);
