@@ -46,6 +46,7 @@
 #include "shots.h"
 #include "sndmast.h"
 #include "sprite.h"
+#include "sys_kaios.h"
 #include "varz.h"
 #include "vga256d.h"
 #include "video.h"

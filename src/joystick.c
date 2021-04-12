@@ -25,6 +25,7 @@
 #include "nortsong.h"
 #include "opentyr.h"
 #include "params.h"
+#include "sys_kaios.h"
 #include "varz.h"
 #include "video.h"
 

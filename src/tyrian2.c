@@ -45,6 +45,7 @@
 #include "setup.h"
 #include "shots.h"
 #include "sprite.h"
+#include "sys_kaios.h"
 #include "vga256d.h"
 #include "video.h"
 
@@ -3191,6 +3192,17 @@ new_game:
 	/* End of find loop for LEVEL??.DAT */
 }
 
+// Menus are evil
+enum title_screen_state_t
+{
+	TITLE_SCREEN_INIT,
+	TITLE_SCREEN_FADE_IN,
+	TITLE_SCREEN_MOVE_LOGO_UP,
+	TITLE_SCREEN_WAIT_INPUT,
+	TITLE_SCREEN_FADE_OUT,
+	// TITLE_SCREEN_NETWORK_GAME, // TODO: network not implemented
+} title_screen_state = TITLE_SCREEN_INIT;
+
 bool JE_titleScreen( JE_boolean animate )
 {
 	bool quit = false;
@@ -3609,7 +3621,12 @@ trentWinsGame:
 		fade_black(15);
 	}
 
-	return quit;
+	if (quit)
+	{
+		JE_tyrianHalt(0);
+	}
+
+	return false;
 }
 
 // This is pain

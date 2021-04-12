@@ -29,6 +29,7 @@
 #include "palette.h"
 #include "sprite.h"
 #include "starlib.h"
+#include "sys_kaios.h"
 #include "vga_palette.h"
 #include "video.h"
 

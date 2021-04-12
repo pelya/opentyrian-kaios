@@ -28,6 +28,7 @@
 #include "picload.h"
 #include "setup.h"
 #include "sprite.h"
+#include "sys_kaios.h"
 #include "video.h"
 
 char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_NAME_COUNT][26];

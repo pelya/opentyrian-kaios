@@ -25,6 +25,7 @@
 #include "opentyr.h"
 #include "mainint.h"
 #include "mouse.h"
+#include "sys_kaios.h"
 #include "video.h"
 
 #include "SDL.h"

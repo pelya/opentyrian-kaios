@@ -59,6 +59,7 @@
 #include "palette.h"
 #include "picload.h"
 #include "sprite.h"
+#include "sys_kaios.h"
 #include "varz.h"
 #include "vga256d.h"
 #include "video.h"
