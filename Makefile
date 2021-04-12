@@ -94,6 +94,7 @@ ifneq ($(EMSCRIPTEN),)
                     -s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
                     -s FORCE_FILESYSTEM=1 \
                     -s ASSERTIONS=0 \
+                    -D KAIOS_SWAP_NAVIGATION_KEYS=1 \
                     --preload-file data@data
     SDL_LDFLAGS := $(SDL_CPPFLAGS)
     SDL_LDLIBS := -lidbfs.js
