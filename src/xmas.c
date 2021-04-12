@@ -36,7 +36,6 @@ bool xmas_time( void )
 	return localtime(&now)->tm_mon == 11;
 }
 
-#if 0 // Don't bother with the prompt, it needs it's own main loop
 bool xmas_prompt( void )
 {
 	const char *prompt[] =
@@ -99,4 +98,3 @@ bool xmas_prompt( void )
 	
 	return (selection == 0 && quit == false);
 }
-#endif // 0

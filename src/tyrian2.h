@@ -24,7 +24,7 @@
 #include "varz.h"
 #include "helptext.h"
 
-bool intro_logos( void );
+void intro_logos( void );
 
 typedef struct
 {
@@ -53,7 +53,7 @@ Sint16 JE_newEnemy( int enemyOffset, Uint16 eDatI, Sint16 uniqueShapeTableI );
 void JE_drawEnemy( int enemyOffset );
 void JE_starShowVGA( void );
 
-bool JE_main( void );
+void JE_main( void );
 void JE_loadMap( void );
 bool JE_titleScreen( JE_boolean animate );
 void JE_readTextSync( void );

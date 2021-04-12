@@ -81,8 +81,8 @@ CFLAGS ?= -pedantic \
           -Werror=implicit-function-declaration \
           -Wunused-result \
           -Wno-gnu-zero-variadic-macro-arguments \
-          -Oz -flto
-LDFLAGS ?= -Oz -flto
+          -O3 -flto
+LDFLAGS ?= -O3 -flto
 LDLIBS ?=
 
 ifneq ($(EMSCRIPTEN),)
@@ -94,6 +94,7 @@ ifneq ($(EMSCRIPTEN),)
                     -s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
                     -s FORCE_FILESYSTEM=1 \
                     -s ASSERTIONS=0 \
+                    -s ASYNCIFY=1 \
                     -D KAIOS_SWAP_NAVIGATION_KEYS=1 \
                     --preload-file data@data
     SDL_LDFLAGS := $(SDL_CPPFLAGS)

@@ -41,11 +41,11 @@ void init_step_fade_palette( int diff[256][3], Palette colors, unsigned int firs
 void init_step_fade_solid( int diff[256][3], SDL_Color color, unsigned int first_color, unsigned int last_color );
 void step_fade_palette( int diff[256][3], int steps, unsigned int first_color, unsigned int last_color );
 
-bool fade_palette( Palette colors, int steps, unsigned int first_color, unsigned int last_color ) __attribute__((warn_unused_result));
-bool fade_solid( SDL_Color color, int steps, unsigned int first_color, unsigned int last_color ) __attribute__((warn_unused_result));
+void fade_palette( Palette colors, int steps, unsigned int first_color, unsigned int last_color );
+void fade_solid( SDL_Color color, int steps, unsigned int first_color, unsigned int last_color );
 
-bool fade_black( int steps ) __attribute__((warn_unused_result));
-bool fade_white( int steps ) __attribute__((warn_unused_result));
+void fade_black( int steps );
+void fade_white( int steps );
 
 #endif /* PALETTE_H */
 

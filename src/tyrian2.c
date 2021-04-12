@@ -619,10 +619,8 @@ draw_enemy_end:
 	player[0].x += 25;
 }
 
-bool JE_main( void )
+void JE_main( void )
 {
-	return false; // TODO: implement this
-
 	char buffer[256];
 
 	int lastEnemyOnScreen;
@@ -713,7 +711,7 @@ start_level:
 	doNotSaveBackup = false;
 
 	if (play_demo)
-		return true;
+		return;
 
 start_level_first:
 
@@ -728,7 +726,7 @@ start_level_first:
 	JE_loadMap();
 
 	if (mainLevel == 0)  // if quit itemscreen
-		return true;          // back to titlescreen
+		return;          // back to titlescreen
 
 	fade_song();
 
@@ -3629,103 +3627,33 @@ trentWinsGame:
 	return false;
 }
 
-// This is pain
-enum intro_logo_state_t
+void intro_logos( void )
 {
-	INTRO_LOGO_INIT,
-	INTRO_LOGO_FADE_1,
-	INTRO_LOGO_PIC_1,
-	INTRO_LOGO_DELAY_1,
-	INTRO_LOGO_FADE_2,
-	INTRO_LOGO_PIC_2,
-	INTRO_LOGO_DELAY_2,
-	INTRO_LOGO_FADE_3,
-	INTRO_LOGO_END,
-} intro_logo_state = INTRO_LOGO_INIT;
+	moveTyrianLogoUp = true;
 
-bool intro_logos( void )
-{
-	switch (intro_logo_state)
-	{
-		case INTRO_LOGO_INIT:
-			moveTyrianLogoUp = true;
-			SDL_FillRect(VGAScreen, NULL, 0);
-			JE_showVGA();
-			intro_logo_state = INTRO_LOGO_FADE_1;
-			diag("intro_logo_state = %d", intro_logo_state);
-		break;
+	SDL_FillRect(VGAScreen, NULL, 0);
 
-		case INTRO_LOGO_FADE_1:
-			if (fade_white(50))
-			{
-				JE_loadPic(VGAScreen, 10, false);
-				JE_showVGA();
-				intro_logo_state = INTRO_LOGO_PIC_1;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	fade_white(50);
 
-		case INTRO_LOGO_PIC_1:
-			if (fade_palette(colors, 50, 0, 255))
-			{
-				setjasondelay(200);
-				intro_logo_state = INTRO_LOGO_DELAY_1;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	JE_loadPic(VGAScreen, 10, false);
+	JE_showVGA();
 
-		case INTRO_LOGO_DELAY_1:
-			JE_showVGA();
-			if (wait_delayorinput(true, true, true))
-			{
-				intro_logo_state = INTRO_LOGO_FADE_2;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	fade_palette(colors, 50, 0, 255);
 
-		case INTRO_LOGO_FADE_2:
-			if (fade_black(10))
-			{
-				JE_loadPic(VGAScreen, 12, false);
-				JE_showVGA();
-				intro_logo_state = INTRO_LOGO_PIC_2;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	setjasondelay(200);
+	wait_delayorinput(true, true, true);
 
-		case INTRO_LOGO_PIC_2:
-			if (fade_palette(colors, 10, 0, 255))
-			{
-				setjasondelay(200);
-				intro_logo_state = INTRO_LOGO_DELAY_2;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	fade_black(10);
 
-		case INTRO_LOGO_DELAY_2:
-			JE_showVGA();
-			if (wait_delayorinput(true, true, true))
-			{
-				intro_logo_state = INTRO_LOGO_FADE_3;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	JE_loadPic(VGAScreen, 12, false);
+	JE_showVGA();
 
-		case INTRO_LOGO_FADE_3:
-			if (fade_black(10))
-			{
-				intro_logo_state = INTRO_LOGO_END;
-				diag("intro_logo_state = %d", intro_logo_state);
-			}
-		break;
+	fade_palette(colors, 10, 0, 255);
 
-		case INTRO_LOGO_END:
-			diag("intro_logo_state = %d", intro_logo_state);
-			return true;
-		break;
-	}
+	setjasondelay(200);
+	wait_delayorinput(true, true, true);
 
-	return false;
+	fade_black(10);
 }
 
 void JE_readTextSync( void )

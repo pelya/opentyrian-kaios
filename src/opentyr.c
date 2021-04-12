@@ -315,78 +315,9 @@ void opentyrian_menu( void )
 			}
 		}
 	} while (!quit);
-
-	if (quit)
-	{
-		JE_tyrianHalt(0);
-	}
 }
 
-// Emscripten main loop needs to return after each screen update, sleeping is forbidden!
-// So we have a state machine to remember the state of each game screen
-
-// Top-level game loop state machine
-enum opentyr_game_state_t
-{
-	OPENTYR_INTRO_LOGO,
-	OPENTYR_INIT_PLAYER_DATA,
-	OPENTYR_TITLE_SCREEN,
-#if 0
-	OPENTYR_DESTRUCT,
-#endif // 0
-	OPENTYR_MAIN,
-};
-enum opentyr_game_state_t opentyr_game_state = OPENTYR_INTRO_LOGO;
-
-void opentyr_game_loop( void )
-{
-	switch (opentyr_game_state)
-	{
-		case OPENTYR_INTRO_LOGO:
-			if (intro_logos())
-			{
-				opentyr_game_state = OPENTYR_INIT_PLAYER_DATA;
-				diag("opentyr_game_state = OPENTYR_INIT_PLAYER_DATA");
-			}
-		break;
-
-		case OPENTYR_INIT_PLAYER_DATA:
-			JE_initPlayerData();
-			JE_sortHighScores();
-			opentyr_game_state = OPENTYR_TITLE_SCREEN;
-			diag("opentyr_game_state = OPENTYR_TITLE_SCREEN");
-		break;
-
-		case OPENTYR_TITLE_SCREEN:
-			if (JE_titleScreen(true))
-			{
-				opentyr_game_state = OPENTYR_MAIN;
-				diag("opentyr_game_state = OPENTYR_MAIN");
-			}
-		break;
-
-		// TODO: enable Destruct
-#if 0
-		case OPENTYR_DESTRUCT:
-			if (JE_destructGame())
-			{
-				opentyr_game_state = OPENTYR_INIT_PLAYER_DATA;
-				diag("opentyr_game_state = OPENTYR_INIT_PLAYER_DATA");
-			}
-		break;
-#endif // 0
-
-		case OPENTYR_MAIN:
-			if (JE_main())
-			{
-				opentyr_game_state = OPENTYR_INIT_PLAYER_DATA;
-				diag("opentyr_game_state = OPENTYR_INIT_PLAYER_DATA");
-			}
-		break;
-	}
-}
-
-int opentyr_main( int argc, const char *argv[] )
+int main( int argc, char *argv[] )
 {
 	mt_srand(time(NULL));
 
@@ -402,6 +333,12 @@ int opentyr_main( int argc, const char *argv[] )
 	{
 		printf("Failed to initialize SDL: %s\n", SDL_GetError());
 		return -1;
+	}
+
+	sys_fs_init();
+	while (!sys_fs_init_get_done())
+	{
+		SDL_Delay(20);
 	}
 
 	JE_loadConfiguration();
@@ -427,7 +364,6 @@ int opentyr_main( int argc, const char *argv[] )
 	JE_loadPals();
 	JE_loadMainShapeTables(xmas ? "tyrianc.shp" : "tyrian.shp");
 
-#if 0 // Don't bother with the prompt, it needs it's own main loop
 	if (xmas && !xmas_prompt())
 	{
 		xmas = false;
@@ -435,11 +371,12 @@ int opentyr_main( int argc, const char *argv[] )
 		free_main_shape_tables();
 		JE_loadMainShapeTables("tyrian.shp");
 	}
-#endif // 0
+
 
 	/* Default Options */
 	youAreCheating = false;
 	smoothScroll = true;
+	loadDestruct = false;
 
 	if (!audio_disabled)
 	{
@@ -477,34 +414,32 @@ int opentyr_main( int argc, const char *argv[] )
 #endif
 	}
 
-#ifdef EMSCRIPTEN
-	emscripten_cancel_main_loop();
-	emscripten_set_main_loop(opentyr_game_loop, 0, 0);
-#else // EMSCRIPTEN
+#ifdef NDEBUG
+	if (!isNetworkGame)
+		intro_logos();
+#endif
+
 	for (; ; )
 	{
-		opentyr_game_loop();
+		JE_initPlayerData();
+		JE_sortHighScores();
+
+		if (JE_titleScreen(true))
+			break;  // user quit from title screen
+
+		if (loadDestruct)
+		{
+			JE_destructGame();
+			loadDestruct = false;
+		}
+		else
+		{
+			JE_main();
+		}
 	}
-#endif // EMSCRIPTEN
+
+	JE_tyrianHalt(0);
 
 	return 0;
 }
 
-void opentyr_wait_fs_init(void)
-{
-	if (sys_fs_init_get_done())
-	{
-		const char *argv[] = { opentyrian_str };
-		opentyr_main(1, argv);
-	}
-}
-
-int main( int argc, const char *argv[] )
-{
-#ifdef EMSCRIPTEN
-	sys_fs_init();
-	emscripten_set_main_loop(opentyr_wait_fs_init, 0, 0);
-#else // EMSCRIPTEN
-	return opentyr_main(argc, argv);
-#endif // EMSCRIPTEN
-}

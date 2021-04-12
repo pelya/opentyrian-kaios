@@ -37,9 +37,6 @@ Uint32 rgb_palette[256], yuv_palette[256];
 
 Palette colors;
 
-static bool fade_init = true;
-static int fade_step;
-
 void JE_loadPals( void )
 {
 	FILE *f = dir_fopen_die(data_dir(), "palette.dat", "rb");
@@ -130,86 +127,54 @@ void step_fade_palette( int diff[256][3], int steps, unsigned int first_color, u
 }
 
 
-bool fade_palette( Palette colors, int steps, unsigned int first_color, unsigned int last_color )
+void fade_palette( Palette colors, int steps, unsigned int first_color, unsigned int last_color )
 {
 	assert(steps > 0);
 	
 	static int diff[256][3];
-
-	if (fade_init)
-	{
-		fade_init = false;
-		fade_step = steps;
-		init_step_fade_palette(diff, colors, first_color, last_color);
-		setdelay(0);
-	}
+	init_step_fade_palette(diff, colors, first_color, last_color);
 	
-	if (wait_delay())
+	for (; steps > 0; steps--)
 	{
-		if (fade_step > 0)
-		{
-			setdelay(1);
-			step_fade_palette(diff, fade_step, first_color, last_color);
-			fade_step--;
-		}
-		else
-		{
-			JE_showVGA();
-			fade_init = true;
-			return true;
-		}
+		setdelay(1);
+		
+		step_fade_palette(diff, steps, first_color, last_color);
+		
+		JE_showVGA();
+		
+		wait_delay();
 	}
-
-	JE_showVGA();
-
-	return false;
 }
 
-bool fade_solid( SDL_Color color, int steps, unsigned int first_color, unsigned int last_color )
+void fade_solid( SDL_Color color, int steps, unsigned int first_color, unsigned int last_color )
 {
 	assert(steps > 0);
 	
 	static int diff[256][3];
-
-	if (fade_init)
+	init_step_fade_solid(diff, color, first_color, last_color);
+	
+	for (; steps > 0; steps--)
 	{
-		fade_init = false;
-		fade_step = steps;
-		init_step_fade_solid(diff, color, first_color, last_color);
-		setdelay(0);
+		setdelay(1);
+		
+		step_fade_palette(diff, steps, first_color, last_color);
+		
+		JE_showVGA();
+		
+		wait_delay();
 	}
-
-	if (wait_delay())
-	{
-		if (fade_step > 0)
-		{
-			setdelay(1);
-			step_fade_palette(diff, fade_step, first_color, last_color);
-			fade_step--;
-		}
-		else
-		{
-			JE_showVGA();
-			fade_init = true;
-			return true;
-		}
-	}
-
-	JE_showVGA();
-
-	return false;
 }
 
-bool fade_black( int steps )
+void fade_black( int steps )
 {
 	SDL_Color black = { 0, 0, 0 };
-	return fade_solid(black, steps, 0, 255);
+	fade_solid(black, steps, 0, 255);
 }
 
-bool fade_white( int steps )
+void fade_white( int steps )
 {
 	SDL_Color white = { 255, 255, 255 };
-	return fade_solid(white, steps, 0, 255);
+	fade_solid(white, steps, 0, 255);
 }
 
 static Uint32 rgb_to_yuv( int r, int g, int b )
