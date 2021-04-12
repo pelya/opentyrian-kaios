@@ -24,6 +24,20 @@
 #ifndef __SYS_KAIOS__
 #define __SYS_KAIOS__
 
+#ifdef KAIOS_SWAP_NAVIGATION_KEYS
+// Navigation keys are rotated in the landscape orientation,
+// but SDL keycodes are not changed, so SDL_SCANCODE_UP points to the left.
+// Remap them so you don't need to replace all SDL_SCANCODE_UP/DOWN/LEFT/RIGHT
+// inside the app code.
+#include <SDL2/SDL_scancode.h>
+
+#define SDL_SCANCODE_UP    79 // RIGHT
+#define SDL_SCANCODE_DOWN  80 // LEFT
+#define SDL_SCANCODE_LEFT  82 // UP
+#define SDL_SCANCODE_RIGHT 81 // DOWN
+
+#endif // KAIOS_SWAP_NAVIGATION_KEYS
+
 #ifdef EMSCRIPTEN
 #include "emscripten.h"
 #endif
@@ -59,7 +73,8 @@ extern void sys_take_wake_lock(void);
 extern void sys_free_wake_lock(void);
 
 // Use sys_exit_app() to close the app. If you simply call exit(0),
-// the app won't clear it's state and will show black screen on the next launch
+// the app won't clear it's state and will show black screen on the next launch.
+// This function does not return.
 extern void sys_exit_app(void);
 
 // After calling SDL_CreateWindow(), call sys_hide_splash_image() to hide splash image.
