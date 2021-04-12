@@ -45,7 +45,7 @@ Uint32 channel_len[SFX_CHANNELS] = { 0 };
 Uint8 channel_vol[SFX_CHANNELS];
 
 int sound_init_state = false;
-int freq = 11025 * OUTPUT_QUALITY;
+int freq = 12000 * OUTPUT_QUALITY;
 
 static SDL_AudioCVT audio_cvt; // used for format conversion
 
@@ -63,7 +63,7 @@ bool init_audio( void )
 	ask.freq = freq;
 	ask.format = (BYTES_PER_SAMPLE == 2) ? AUDIO_S16SYS : AUDIO_S8;
 	ask.channels = 1;
-	ask.samples = 2048;
+	ask.samples = 8192; // 2048;
 	ask.callback = audio_cb;
 	
 	printf("\trequested %d Hz, %d channels, %d samples\n", ask.freq, ask.channels, ask.samples);
