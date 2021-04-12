@@ -152,7 +152,6 @@ void sys_exit_app(void)
 			document.getElementById('canvas').style.height = String(sys_shutdown_anim) + '%';
 			document.getElementById('canvas').style.marginTop = String((100 - sys_shutdown_anim) / 2) + '%';
 		}, 20);
-		throw new Error('App exit requested');
 	});
 #endif // EMSCRIPTEN
 	exit(0);
