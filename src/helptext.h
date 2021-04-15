@@ -63,6 +63,7 @@ extern char difficultyNameB[11][21];
 extern char joyButtonNames[5][21];
 extern char superShips[HELPTEXT_SUPERSHIPS_COUNT][26];
 extern char specialName[HELPTEXT_SPECIALNAME_COUNT][10];
+extern char specialNameNumeric[HELPTEXT_SPECIALNAME_COUNT][10];
 extern char destructHelp[25][22];
 extern char weaponNames[17][17];
 extern char destructModeName[DESTRUCT_MODES][13];

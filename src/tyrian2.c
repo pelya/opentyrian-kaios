@@ -3424,7 +3424,8 @@ bool JE_titleScreen( JE_boolean animate )
 				{
 					for (unsigned int i = 0; i < SA_ENGAGE; i++)
 					{
-						if (toupper(last_text[ti]) == specialName[i][arcade_code_i[i]])
+						if (toupper(last_text[ti]) == specialName[i][arcade_code_i[i]] ||
+							toupper(last_text[ti]) == specialNameNumeric[i][arcade_code_i[i]])
 							arcade_code_i[i]++;
 						else
 							arcade_code_i[i] = 0;

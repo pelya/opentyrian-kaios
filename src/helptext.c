@@ -358,6 +358,32 @@ void JE_loadHelpText( void )
 		read_encrypted_pascal_string(specialName[i], sizeof(specialName[i]), f);
 	skip_pascal_string(f);
 
+	for (unsigned int i = 0; i < COUNTOF(specialName); ++i)
+	{
+		for (unsigned int ii = 0; specialName[i][ii] != 0; ++ii)
+		{
+			// Convert arcade keycodes to T9 input for numeric keypad
+			char c = toupper(specialName[i][ii]);
+			specialNameNumeric[i][ii] = '1'; // All non-letter symbols like '!' and '.'
+			if (strchr("ABC", c))
+				specialNameNumeric[i][ii] = '2';
+			if (strchr("DEF", c))
+				specialNameNumeric[i][ii] = '3';
+			if (strchr("GHI", c))
+				specialNameNumeric[i][ii] = '4';
+			if (strchr("JKL", c))
+				specialNameNumeric[i][ii] = '5';
+			if (strchr("MNO", c))
+				specialNameNumeric[i][ii] = '6';
+			if (strchr("PQRS", c))
+				specialNameNumeric[i][ii] = '7';
+			if (strchr("TUV", c))
+				specialNameNumeric[i][ii] = '8';
+			if (strchr("WXYZ", c))
+				specialNameNumeric[i][ii] = '9';
+		}
+	}
+
 	/*Secret DESTRUCT game*/
 	skip_pascal_string(f);
 	for (unsigned int i = 0; i < COUNTOF(destructHelp); ++i)
