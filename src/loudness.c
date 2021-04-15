@@ -31,7 +31,7 @@ float music_volume = 0, sample_volume = 0;
 bool music_stopped = true;
 unsigned int song_playing = 0;
 
-bool audio_disabled = false, music_disabled = false, samples_disabled = false;
+bool audio_disabled = false, music_disabled = true, samples_disabled = false;
 
 /* SYN: These shouldn't be used outside this file. Hands off! */
 FILE *music_file = NULL;
