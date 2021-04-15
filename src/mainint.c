@@ -292,7 +292,7 @@ void JE_helpSystem( JE_byte startTopic )
 								break;
 						}
 					}
-				} while (!(lastkey_scan == SDL_SCANCODE_ESCAPE || lastkey_scan == SDL_SCANCODE_RETURN));
+				} while (!(lastkey_scan == SDL_SCANCODE_ESCAPE || lastkey_scan == SDL_SCANCODE_BACKSPACE || lastkey_scan == SDL_SCANCODE_RETURN));
 
 				if (lastkey_scan == SDL_SCANCODE_RETURN)
 				{
@@ -429,7 +429,7 @@ void JE_helpSystem( JE_byte startTopic )
 		{
 			lastkey_scan = SDL_SCANCODE_ESCAPE;
 		}
-	} while (lastkey_scan != SDL_SCANCODE_ESCAPE);
+	} while (lastkey_scan != SDL_SCANCODE_ESCAPE && lastkey_scan != SDL_SCANCODE_BACKSPACE);
 }
 
 // cost to upgrade a weapon power from power-1 (where power == 0 indicates an unupgraded weapon)
@@ -675,6 +675,7 @@ void JE_loadScreen( void )
 
 				break;
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				quit = true;
 				break;
 			default:
@@ -995,6 +996,7 @@ void JE_highScoreScreen( void )
 			{
 			case SDL_SCANCODE_RETURN:
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				quit = true;
 				break;
 			default:
@@ -1082,6 +1084,7 @@ void JE_doInGameSetup( void )
 		quitRequested = false;
 
 		keysactive[SDL_SCANCODE_ESCAPE] = false;
+		keysactive[SDL_SCANCODE_BACKSPACE] = false;
 
 #ifdef WITH_NETWORK
 		if (isNetworkGame)
@@ -1254,6 +1257,7 @@ JE_boolean JE_inGameSetup( void )
 					}
 					break;
 				case SDL_SCANCODE_ESCAPE:
+				case SDL_SCANCODE_BACKSPACE:
 					quit = true;
 					JE_playSampleNum(S_SPRING);
 					break;
@@ -1618,7 +1622,7 @@ void JE_highScoreCheck( void )
 					{
 						switch (lastkey_scan)
 						{
-							case SDL_SCANCODE_BACKSPACE:
+							//case SDL_SCANCODE_BACKSPACE:
 							case SDL_SCANCODE_DELETE:
 								if (temp)
 								{
@@ -1627,6 +1631,7 @@ void JE_highScoreCheck( void )
 								}
 								break;
 							case SDL_SCANCODE_ESCAPE:
+							case SDL_SCANCODE_BACKSPACE:
 								quit = true;
 								cancel = true;
 								break;
@@ -2443,7 +2448,7 @@ void JE_operation( JE_byte slot )
 			{
 				switch (lastkey_scan)
 				{
-					case SDL_SCANCODE_BACKSPACE:
+					//case SDL_SCANCODE_BACKSPACE:
 					case SDL_SCANCODE_DELETE:
 						if (temp)
 						{
@@ -2453,6 +2458,7 @@ void JE_operation( JE_byte slot )
 						}
 						break;
 					case SDL_SCANCODE_ESCAPE:
+					case SDL_SCANCODE_BACKSPACE:
 						quit = true;
 						JE_playSampleNum(S_SPRING);
 						break;
@@ -2731,7 +2737,7 @@ void JE_mainKeyboardInput( void )
 	pause_pressed = pause_pressed || keysactive[SDL_SCANCODE_P];
 
 	/* in-game setup */
-	ingamemenu_pressed = ingamemenu_pressed || keysactive[SDL_SCANCODE_ESCAPE];
+	ingamemenu_pressed = ingamemenu_pressed || keysactive[SDL_SCANCODE_ESCAPE] || keysactive[SDL_SCANCODE_BACKSPACE];
 
 	if (keysactive[SDL_SCANCODE_BACKSPACE])
 	{

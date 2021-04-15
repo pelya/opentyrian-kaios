@@ -1289,6 +1289,7 @@ void JE_itemScreen( void )
 				break;
 
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				keyboardUsed = true;
 
 				JE_playSampleNum(S_SPRING);
@@ -2488,6 +2489,7 @@ JE_boolean JE_quitRequest( void )
 					done = true;
 					break;
 				case SDL_SCANCODE_ESCAPE:
+				case SDL_SCANCODE_BACKSPACE:
 					quit_selected = false;
 					done = true;
 					break;
@@ -2760,6 +2762,7 @@ void JE_menuFunction( JE_byte select )
 				}
 				
 				if (lastkey_scan != SDL_SCANCODE_ESCAPE && // reserved for menu
+				    lastkey_scan != SDL_SCANCODE_BACKSPACE && // reserved for menu
 				    lastkey_scan != SDL_SCANCODE_F11 &&    // reserved for gamma
 				    lastkey_scan != SDL_SCANCODE_P)        // reserved for pause
 				{

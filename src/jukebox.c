@@ -127,6 +127,7 @@ void jukebox( void )
 			switch (lastkey_scan)
 			{
 			case SDL_SCANCODE_ESCAPE: // quit jukebox
+			case SDL_SCANCODE_BACKSPACE:
 			case SDL_SCANCODE_Q:
 				trigger_quit = true;
 				break;

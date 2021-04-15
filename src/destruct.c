@@ -680,7 +680,7 @@ static enum de_mode_t JE_modeSelect( void )
 		} while(!newkey);
 
 		/* See what was pressed */
-		if (keysactive[SDL_SCANCODE_ESCAPE])
+		if (keysactive[SDL_SCANCODE_ESCAPE] || keysactive[SDL_SCANCODE_BACKSPACE])
 		{
 			mode = MODE_NONE; /* User is quitting, return failure */
 			break;
@@ -1494,9 +1494,10 @@ static enum de_state_t DE_RunTick( void )
 
 	wait_delay();
 
-	if (keysactive[SDL_SCANCODE_ESCAPE])
+	if (keysactive[SDL_SCANCODE_ESCAPE] || keysactive[SDL_SCANCODE_BACKSPACE])
 	{
 		keysactive[SDL_SCANCODE_ESCAPE] = false;
+		keysactive[SDL_SCANCODE_BACKSPACE] = false;
 		return(STATE_INIT); /* STATE_INIT drops us to the mode select */
 	}
 

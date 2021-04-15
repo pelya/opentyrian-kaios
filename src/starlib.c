@@ -178,6 +178,7 @@ void JE_starlib_main( void )
 			case SDL_SCANCODE_9: key = '9'; break;
 			case SDL_SCANCODE_0: key = '0'; break;
 			case SDL_SCANCODE_ESCAPE: key = 27; break;
+			case SDL_SCANCODE_BACKSPACE: key = 27; break;
 			case SDL_SCANCODE_MINUS: key = '-'; break;
 			case SDL_SCANCODE_LEFTBRACKET: key = '['; break;
 			case SDL_SCANCODE_RIGHTBRACKET: key = ']'; break;

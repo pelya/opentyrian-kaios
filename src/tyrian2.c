@@ -3533,6 +3533,7 @@ bool JE_titleScreen( JE_boolean animate )
 				switch (lastkey_scan)
 				{
 				case SDL_SCANCODE_ESCAPE:
+				case SDL_SCANCODE_BACKSPACE:
 					quit = true;
 					break;
 				case SDL_SCANCODE_RETURN:

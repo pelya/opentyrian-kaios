@@ -306,6 +306,7 @@ void opentyrian_menu( void )
 				break;
 				
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				quit = true;
 				JE_playSampleNum(S_SPRING);
 				break;

@@ -85,6 +85,7 @@ bool xmas_prompt( void )
 					decided = true;
 					break;
 				case SDL_SCANCODE_ESCAPE:
+				case SDL_SCANCODE_BACKSPACE:
 					decided = true;
 					quit = true;
 					break;

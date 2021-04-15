@@ -90,6 +90,7 @@ bool select_gameplay( void )
 				return true;
 
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				JE_playSampleNum(S_SPRING);
 				/* fading handled elsewhere
 				fade_black(10); */
@@ -163,6 +164,7 @@ bool select_episode( void )
 				return true;
 
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				JE_playSampleNum(S_SPRING);
 				/* fading handled elsewhere
 				fade_black(10); */
@@ -248,6 +250,7 @@ bool select_difficulty( void )
 				return true;
 
 			case SDL_SCANCODE_ESCAPE:
+			case SDL_SCANCODE_BACKSPACE:
 				JE_playSampleNum(S_SPRING);
 				/* fading handled elsewhere
 				fade_black(10); */
