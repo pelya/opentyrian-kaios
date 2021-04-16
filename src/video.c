@@ -109,6 +109,8 @@ void init_video( void )
 	SDL_ShowWindow(main_window);
 
 	input_grab(input_grab_enabled);
+
+	SDL_EventState(SDL_TEXTINPUT, SDL_DISABLE);
 }
 
 void deinit_video( void )
