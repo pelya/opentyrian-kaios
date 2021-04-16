@@ -102,9 +102,23 @@ SDL_SCANCODE_AC_FORWARD and SDL_SCANCODE_AC_BACK for LSK and RSK (left soft key 
 
 SDL_SCANCODE_VOLUMEUP and SDL_SCANCODE_VOLUMEDOWN for volume keys
 
-With Emscripten, your main loop should not block anywhere - do not call sleep() or SDL_Delay() or SDL_WaitEvent()
+By default all keypresses are passed to the OS, so for example holding D-Pad Center key for 2 seconds
+will launch Google Assistant while your app is active, and End Call key will close your app immediately.
+To prevent this, disable SDL_TEXTINPUT event after initializing video:
 
-Use emscripten_set_main_loop() to call your main loop function after you initialized video and everything else
+    SDL_EventState(SDL_TEXTINPUT, SDL_DISABLE);
+
+If you are using landscape mode, the screen is rotated, but the D-Pad is not rotated,
+and keycodes SDL_SCANCODE_LEFT/RIGHT/UP/DOWN are sent for the wrong direction keys.
+To fix this, add '-D KAIOS_SWAP_NAVIGATION_KEYS=1' to your compiler flags, and include sys_kaios.h everywhere,
+it will redefine SDL keycodes for navigation keys for the D-Pad rotated to the side.
+
+With Emscripten, your main loop should not block anywhere - do not call sleep() or SDL_Delay() or SDL_WaitEvent().
+Use emscripten_set_main_loop() to call your main loop function after you initialized video and everything else.
+
+Alternatively, you can add parameter '-s ASYNCIFY=1' to your compiler flags, this will make your code
+unwind and rewind the stack whenever it enters sleep or screen update function, and process web browser main loop,
+this makes your app run significantly slower, but you don't need to rewrite your code at all.
 
 Use sys_exit_app() to close the app.
 if you simply call exit(0) the app won't clear it's state and will show black screen on the next launch.
@@ -167,6 +181,12 @@ https://www.w3.org/TR/tcp-udp-sockets/
 
 https://developer.mozilla.org/en-US/docs/Archive/B2G_OS/API/UDPSocket
 
-It requires the app type to be set to "privileged" in manifest.webapp.
+It requires privileged app permissions - add following code to your manifest.webapp:
+
+    "type", "privileged",
+    "dependencies": {
+        "ads-sdk": "1.4.1"
+    }
+
 Privileged app cannot contain Javascript code embedded into HTML directly,
 you must use <script src="..."> everywhere, the embedded Javascript won't be executed.
