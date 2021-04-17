@@ -49,6 +49,9 @@ bool input_grab_enabled = true;
 bool input_grab_enabled = false;
 #endif
 
+bool window_focused = true;
+bool window_shown = true;
+
 void flush_events_buffer( void )
 {
 	SDL_Event ev;
@@ -148,9 +151,24 @@ void service_SDL_events( JE_boolean clear_new )
 		{
 			case SDL_WINDOWEVENT:
 				if (ev.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+				{
 					input_grab(false);
-				else if (ev.window.event == SDL_WINDOWEVENT_RESIZED)
+					window_focused = false;
+				}
+				if (ev.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+					window_focused = true;
+				if (ev.window.event == SDL_WINDOWEVENT_HIDDEN)
+					window_shown = false;
+				if (ev.window.event == SDL_WINDOWEVENT_SHOWN)
+					window_shown = true;
+				if (ev.window.event == SDL_WINDOWEVENT_RESIZED)
 					video_on_win_resize();
+
+				if (window_shown && window_focused)
+					SDL_PauseAudio(0);
+				else
+					SDL_PauseAudio(1);
+
 				break;
 
 			case SDL_MOUSEMOTION:
