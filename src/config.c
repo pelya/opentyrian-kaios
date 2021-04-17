@@ -283,6 +283,13 @@ bool load_opentyrian_config( void )
 			set_scaling_mode_by_name(scaling_mode);
 	}
 
+	section = config_find_section(config, "audio", NULL);
+	if (section != NULL)
+	{
+		config_get_bool_option(section, "music disabled", &music_disabled);
+		config_get_bool_option(section, "samples disabled", &samples_disabled);
+	}
+
 	memcpy(keySettings, defaultKeySettings, sizeof(keySettings));
 	useNumericKeypad = true;
 
@@ -322,6 +329,12 @@ bool save_opentyrian_config( void )
 	config_set_string_option(section, "scaler", scalers[scaler].name);
 	
 	config_set_string_option(section, "scaling_mode", scaling_mode_names[scaling_mode]);
+
+	section = config_find_or_add_section(config, "audio", NULL);
+	if (section == NULL)
+		exit(EXIT_FAILURE);  // out of memory
+	config_set_bool_option(section, "music disabled", music_disabled, NO_YES);
+	config_set_bool_option(section, "samples disabled", samples_disabled, NO_YES);
 
 	section = config_find_or_add_section(config, "keyboard", NULL);
 	if (section == NULL)

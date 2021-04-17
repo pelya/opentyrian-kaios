@@ -2684,6 +2684,20 @@ void JE_menuFunction( JE_byte select )
 			performSave = true;
 			quikSave = false;
 			break;
+		case 4:
+			music_disabled = !music_disabled;
+			if (music_disabled)
+			{
+				stop_song();
+			}
+			else
+			{
+				restart_song();
+			}
+			break;
+		case 5:
+			samples_disabled = !samples_disabled;
+			break;
 		case 6:
 			curMenu = MENU_JOYSTICK_CONFIG;
 			break;
