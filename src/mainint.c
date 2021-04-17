@@ -887,6 +887,7 @@ void JE_highScoreScreen( void )
 	JE_loadCompShapes(&shapes6, '1');  // need arrow sprites
 
 	fade_black(10);
+	sys_show_fullscreen_advertisement();
 	JE_loadPic(VGAScreen, 2, false);
 	JE_showVGA();
 	fade_palette(colors, 10, 0, 255);
