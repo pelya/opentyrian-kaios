@@ -299,7 +299,7 @@ bool load_opentyrian_config( void )
 					keySettings[i] = scancode;
 			}
 		}
-		config_get_bool_option(section, "use_numeric_keypad", &useNumericKeypad);
+		config_get_bool_option(section, "use numeric keypad", &useNumericKeypad);
 	}
 
 	fclose(file);
@@ -334,7 +334,7 @@ bool save_opentyrian_config( void )
 			keyName = NULL;
 		config_set_string_option(section, keySettingNames[i], keyName);
 	}
-	config_set_bool_option(section, "use_numeric_keypad", useNumericKeypad, NO_YES);
+	config_set_bool_option(section, "use numeric keypad", useNumericKeypad, NO_YES);
 
 #ifndef TARGET_WIN32
 	mkdir(get_user_directory(), 0700);
