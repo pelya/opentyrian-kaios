@@ -3135,18 +3135,35 @@ redo:
 				/* keyboard input */
 				if ((inputDevice == 0 || inputDevice == 1) && !play_demo)
 				{
-					if (keysactive[keySettings[KEY_SETTING_UP]])
+					if (keysactive[keySettings[KEY_SETTING_UP]]
+						|| (useNumericKeypad
+						&&  (keysactive[SDL_SCANCODE_3]
+						||   keysactive[SDL_SCANCODE_6]
+						||   keysactive[SDL_SCANCODE_9])))
 						this_player->y -= CURRENT_KEY_SPEED;
-					if (keysactive[keySettings[KEY_SETTING_DOWN]])
+					if (keysactive[keySettings[KEY_SETTING_DOWN]]
+						|| (useNumericKeypad
+						&&  (keysactive[SDL_SCANCODE_1]
+						||   keysactive[SDL_SCANCODE_4]
+						||   keysactive[SDL_SCANCODE_7])))
 						this_player->y += CURRENT_KEY_SPEED;
 
-					if (keysactive[keySettings[KEY_SETTING_LEFT]])
+					if (keysactive[keySettings[KEY_SETTING_LEFT]]
+						|| (useNumericKeypad
+						&&  (keysactive[SDL_SCANCODE_1]
+						||   keysactive[SDL_SCANCODE_2]
+						||   keysactive[SDL_SCANCODE_3])))
 						this_player->x -= CURRENT_KEY_SPEED;
-					if (keysactive[keySettings[KEY_SETTING_RIGHT]])
+					if (keysactive[keySettings[KEY_SETTING_RIGHT]]
+						|| (useNumericKeypad
+						&&  (keysactive[SDL_SCANCODE_7]
+						||   keysactive[SDL_SCANCODE_8]
+						||   keysactive[SDL_SCANCODE_9])))
 						this_player->x += CURRENT_KEY_SPEED;
 
-					button[0] = button[0] || keysactive[keySettings[KEY_SETTING_FIRE]];
-					button[3] = button[3] || keysactive[keySettings[KEY_SETTING_CHANGE_FIRE]];
+					button[0] = button[0] || !keysactive[keySettings[KEY_SETTING_FIRE]];
+					button[3] = button[3] || keysactive[keySettings[KEY_SETTING_CHANGE_FIRE]]
+								|| (useNumericKeypad && keysactive[SDL_SCANCODE_5]);
 					button[1] = button[1] || keysactive[keySettings[KEY_SETTING_LEFT_SIDEKICK]];
 					button[2] = button[2] || keysactive[keySettings[KEY_SETTING_RIGHT_SIDEKICK]];
 
