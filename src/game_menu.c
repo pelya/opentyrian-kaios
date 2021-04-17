@@ -104,7 +104,7 @@ static PlayerItems old_items[2];  // TODO: should not be global if possible
 
 static struct cube_struct cube[4];
 
-static const JE_MenuChoiceType menuChoicesDefault = { 7, 9, 8, 0, 0, 11, (SAVE_FILES_NUM / 2) + 2, 0, 0, 6, 4, 6, 7, 5 };
+static const JE_MenuChoiceType menuChoicesDefault = { 7, 9, 8, 0, 0, 12, (SAVE_FILES_NUM / 2) + 2, 0, 0, 6, 4, 6, 7, 5 };
 static const JE_byte menuEsc[MENU_MAX] = { 0, 1, 1, 1, 2, 3, 3, 1, 8, 0, 0, 11, 3, 0 };
 static const JE_byte itemAvailMap[7] = { 1, 2, 3, 9, 4, 6, 7 };
 static const JE_word planetX[21] = { 200, 150, 240, 300, 270, 280, 320, 260, 220, 150, 160, 210, 80, 240, 220, 180, 310, 330, 150, 240, 200 };
@@ -390,7 +390,7 @@ void JE_itemScreen( void )
 
 		if (curMenu == MENU_KEYBOARD_CONFIG)
 		{
-			for (int x = 2; x <= 11; x++)
+			for (int x = 2; x <= 12; x++)
 			{
 				if (x == curSel[curMenu])
 				{
@@ -403,16 +403,25 @@ void JE_itemScreen( void )
 					temp2 = 28;
 				}
 
-				JE_textShade(VGAScreen, 166, 38 + (x - 2)*12, menuInt[curMenu + 1][x-1], temp2 / 16, temp2 % 16 - 8, DARKEN);
-
-				if (x < 10) /* 10 = reset to defaults, 11 = done */
+				if (x == 10)
 				{
+					JE_textShade(VGAScreen, 166, 38 + (x - 2)*12, "NUMERIC KEYS", temp2 / 16, temp2 % 16 - 8, DARKEN);
 					temp2 = (x == curSel[curMenu]) ? 252 : 250;
-					JE_textShade(VGAScreen, 236, 38 + (x - 2)*12, SDL_GetScancodeName(keySettings[x-2]), temp2 / 16, temp2 % 16 - 8, DARKEN);
+					JE_textShade(VGAScreen, 236, 38 + (x - 2)*12, useNumericKeypad ? "YES" : "NO", temp2 / 16, temp2 % 16 - 8, DARKEN);
+				}
+				else
+				{
+					JE_textShade(VGAScreen, 166, 38 + (x - 2)*12, menuInt[curMenu + 1][x > 10 ? x-2 : x-1], temp2 / 16, temp2 % 16 - 8, DARKEN);
+
+					if (x < 10) /* 11 = reset to defaults, 12 = done */
+					{
+						temp2 = (x == curSel[curMenu]) ? 252 : 250;
+						JE_textShade(VGAScreen, 236, 38 + (x - 2)*12, SDL_GetScancodeName(keySettings[x-2]), temp2 / 16, temp2 % 16 - 8, DARKEN);
+					}
 				}
 			}
 
-			menuChoices[MENU_KEYBOARD_CONFIG] = 11;
+			menuChoices[MENU_KEYBOARD_CONFIG] = 12;
 		}
 
 		if (curMenu == MENU_JOYSTICK_CONFIG)
@@ -2380,6 +2389,11 @@ void JE_drawMainMenuHelpText( void )
 	else if (curMenu == MENU_KEYBOARD_CONFIG &&
 	         curSel[MENU_KEYBOARD_CONFIG] == 10)
 	{
+		strcpy(tempStr, "Use numeric keypad to move the ship");
+	}
+	else if (curMenu == MENU_KEYBOARD_CONFIG &&
+	         curSel[MENU_KEYBOARD_CONFIG] == 11)
+	{
 		memcpy(tempStr, mainMenuHelp[25-1], sizeof(tempStr));
 	}
 	else if (leftPower || rightPower)
@@ -2709,11 +2723,16 @@ void JE_menuFunction( JE_byte select )
 		break;
 
 	case MENU_KEYBOARD_CONFIG:
-		if (curSelect == 10) /* reset to defaults */
+		if (curSelect == 10) /* Numeric keypad */
+		{
+			useNumericKeypad = !useNumericKeypad;
+		}
+		else if (curSelect == 11) /* reset to defaults */
 		{
 			memcpy(keySettings, defaultKeySettings, sizeof(keySettings));
+			useNumericKeypad = true;
 		}
-		else if (curSelect == 11) /* done */
+		else if (curSelect == 12) /* done */
 		{
 			curMenu = isNetworkGame
 				? MENU_LIMITED_OPTIONS

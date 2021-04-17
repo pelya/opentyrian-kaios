@@ -196,6 +196,7 @@ JE_byte mainLevel, nextLevel, saveLevel;   /*Current Level #*/
 /* Keyboard Junk */
 DosKeySettings dosKeySettings;
 KeySettings keySettings;
+bool useNumericKeypad = true;
 
 /* Configuration */
 JE_shortint levelFilter, levelFilterNew, levelBrightness, levelBrightnessChg;
@@ -283,6 +284,7 @@ bool load_opentyrian_config( void )
 	}
 
 	memcpy(keySettings, defaultKeySettings, sizeof(keySettings));
+	useNumericKeypad = true;
 
 	section = config_find_section(config, "keyboard", NULL);
 	if (section != NULL)
@@ -297,6 +299,7 @@ bool load_opentyrian_config( void )
 					keySettings[i] = scancode;
 			}
 		}
+		config_get_bool_option(section, "use_numeric_keypad", &useNumericKeypad);
 	}
 
 	fclose(file);
@@ -331,6 +334,7 @@ bool save_opentyrian_config( void )
 			keyName = NULL;
 		config_set_string_option(section, keySettingNames[i], keyName);
 	}
+	config_set_bool_option(section, "use_numeric_keypad", useNumericKeypad, NO_YES);
 
 #ifndef TARGET_WIN32
 	mkdir(get_user_directory(), 0700);

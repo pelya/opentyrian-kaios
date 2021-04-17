@@ -125,6 +125,7 @@ extern char lastLevelName[11], levelName[11];
 extern JE_byte mainLevel, nextLevel, saveLevel;
 extern DosKeySettings dosKeySettings;  // fka keySettings
 extern KeySettings keySettings;
+extern bool useNumericKeypad;
 extern JE_shortint levelFilter, levelFilterNew, levelBrightness, levelBrightnessChg;
 extern JE_boolean filtrationAvail, filterActive, filterFade, filterFadeStart;
 extern JE_boolean gameJustLoaded;
