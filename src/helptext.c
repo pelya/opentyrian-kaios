@@ -71,6 +71,7 @@ char difficultyNameB[11][21];                                            /* [0..
 char joyButtonNames[5][21];                                              /* [1..5] of string [20] */
 char superShips[HELPTEXT_SUPERSHIPS_COUNT][26];                          /* [0..10] of string [25] */
 char specialName[HELPTEXT_SPECIALNAME_COUNT][10];                        /* [1..9] of string [9] */
+char specialNameNumeric[HELPTEXT_SPECIALNAME_COUNT][10];                 /* Generated from specialName */
 char destructHelp[25][22];                                               /* [1..25] of string [21] */
 char weaponNames[17][17];                                                /* [1..17] of string [16] */
 char destructModeName[DESTRUCT_MODES][13];                               /* [1..destructmodes] of string [12] */
