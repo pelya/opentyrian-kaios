@@ -2190,7 +2190,7 @@ draw_player_shot_loop_end:
 				{
 					push_joysticks_as_keyboard();
 					service_SDL_events(true);
-					if ((newkey || button[0] || button[1] || button[2]) || newmouse)
+					if ((newkey || button[1] || button[2]) || newmouse)
 					{
 						reallyEndLevel = true;
 					}
