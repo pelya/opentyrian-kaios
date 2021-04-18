@@ -48,9 +48,11 @@ gamesdir ?= $(datadir)/games
 
 TARGET := opentyrian
 OBJDIR := obj
+APPDATA := data
 ifneq ($(EMSCRIPTEN),)
 TARGET := app.js
 OBJDIR := obj-js
+APPDATA := appdata.js
 endif
 
 SRCS := $(wildcard src/*.c)
@@ -96,9 +98,9 @@ ifneq ($(EMSCRIPTEN),)
                     -s ASSERTIONS=0 \
                     -s ASYNCIFY=1 \
                     -D KAIOS_SWAP_NAVIGATION_KEYS=1 \
-                    --preload-file data@data
+                    -D USE_AUDIO_WORKER=1
     SDL_LDFLAGS := $(SDL_CPPFLAGS)
-    SDL_LDLIBS := -lidbfs.js
+    SDL_LDLIBS := -lidbfs.js --pre-js appdata.js
 else ifeq ($(WITH_NETWORK), true)
     SDL_CPPFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --cflags)
     SDL_LDFLAGS := $(shell $(PKG_CONFIG) sdl2 SDL2_net --libs-only-L --libs-only-other)
@@ -165,11 +167,40 @@ clean :
 	rm -f $(DEPS)
 	rm -f $(TARGET)
 
-$(TARGET) : $(OBJS)
-	$(CC) $(ALL_CFLAGS) $(ALL_LDFLAGS) -o $@ $^ $(ALL_LDLIBS)
+$(TARGET) : $(OBJS) $(APPDATA)
+	$(CC) $(ALL_CFLAGS) $(ALL_LDFLAGS) -o $@ $(filter-out $(APPDATA), $^) $(ALL_LDLIBS)
 
 -include $(DEPS)
 
 $(OBJDIR)/%.o : src/%.c
 	@mkdir -p "$(dir $@)"
 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c -o $@ $<
+
+$(APPDATA):
+	$(EMSCRIPTEN_TOOLS)/file_packager appdata.data --js-output=$@ --preload data@data
+
+# AUDIO JS WORKER ###############################################################
+
+TARGET_AUDIO := audio.js
+
+OBJDIR_AUDIO := obj-audio
+
+SRCS_AUDIO := src/audio_worker.c src/loudness.c src/lds_play.c src/nortsong.c src/opl.c
+OBJS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.o)
+DEPS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.d)
+
+CPPFLAGS_AUDIO := -s USE_SDL=0 \
+                  -s ASYNCIFY=0 \
+                  -s BUILD_AS_WORKER=1 \
+                  -s EXPORTED_FUNCTIONS="['worker_callback']" \
+                  -D AUDIO_WORKER_MAIN=1 \
+                  --pre-js appdata.js
+
+$(TARGET_AUDIO) : $(OBJS_AUDIO)
+	$(CC) $(ALL_CFLAGS) $(CPPFLAGS_AUDIO) -o $@ $^
+
+-include $(DEPS_AUDIO)
+
+$(OBJDIR_AUDIO)/%.o : src/%.c
+	@mkdir -p "$(dir $@)"
+	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) $(CPPFLAGS_AUDIO) -c -o $@ $<
