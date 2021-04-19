@@ -39,7 +39,7 @@
 #endif // KAIOS_SWAP_NAVIGATION_KEYS
 
 #ifdef EMSCRIPTEN
-#include "emscripten.h"
+#include <emscripten.h>
 #endif
 
 #ifdef EMSCRIPTEN

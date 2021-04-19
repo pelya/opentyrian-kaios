@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #ifdef EMSCRIPTEN
-#include "emscripten.h"
+#include <emscripten.h>
 #endif
 
 #include "sys_kaios.h"
