@@ -189,11 +189,11 @@ SRCS_AUDIO := src/audio_worker.c src/loudness.c src/lds_play.c src/nortsong.c sr
 OBJS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.o)
 DEPS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.d)
 
-CPPFLAGS_AUDIO := -s USE_SDL=0 \
+CPPFLAGS_AUDIO := -s USE_SDL=2 \
                   -s ASYNCIFY=0 \
                   -s BUILD_AS_WORKER=1 \
-                  -s EXPORTED_FUNCTIONS="['worker_callback']" \
                   -D AUDIO_WORKER_MAIN=1 \
+                  -s EXPORTED_FUNCTIONS="['audio_worker_callback']" \
                   --pre-js appdata.js
 
 $(TARGET_AUDIO) : $(OBJS_AUDIO)

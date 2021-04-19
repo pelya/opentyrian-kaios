@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 #include "loudness.h"
 
 #include "file.h"
@@ -26,3 +27,12 @@
 
 #include <stdlib.h>
 
+#ifdef AUDIO_WORKER_MAIN
+
+#include <emscripten.h>
+
+void audio_worker_callback(char *data, int size, void *arg)
+{
+}
+
+#endif // AUDIO_WORKER_MAIN
