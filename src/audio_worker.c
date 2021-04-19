@@ -31,7 +31,11 @@
 
 #include <emscripten.h>
 
-void audio_worker_callback(char *data, int size, void *arg)
+void w_init(char *data, int size, void *arg)
+{
+}
+
+void w_cb(char *data, int size, void *arg)
 {
 }
 

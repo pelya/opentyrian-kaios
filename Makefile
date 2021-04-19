@@ -190,10 +190,16 @@ OBJS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.o)
 DEPS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.d)
 
 CPPFLAGS_AUDIO := -s USE_SDL=2 \
-                  -s ASYNCIFY=0 \
+                  -s WASM=0 \
+                  -s ALLOW_MEMORY_GROWTH=1 \
+                  -s INITIAL_MEMORY=8388608 \
+                  -s NO_EXIT_RUNTIME=1 \
+                  -s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
+                  -s FORCE_FILESYSTEM=1 \
+                  -s ASSERTIONS=0 \
                   -s BUILD_AS_WORKER=1 \
                   -D AUDIO_WORKER_MAIN=1 \
-                  -s EXPORTED_FUNCTIONS="['audio_worker_callback']" \
+                  -s EXPORTED_FUNCTIONS="['_w_init','_w_cb']" \
                   --pre-js appdata.js
 
 $(TARGET_AUDIO) : $(OBJS_AUDIO)
@@ -203,4 +209,4 @@ $(TARGET_AUDIO) : $(OBJS_AUDIO)
 
 $(OBJDIR_AUDIO)/%.o : src/%.c
 	@mkdir -p "$(dir $@)"
-	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) $(CPPFLAGS_AUDIO) -c -o $@ $<
+	$(CC) $(ALL_CFLAGS) $(CPPFLAGS_AUDIO) -c -o $@ $<
