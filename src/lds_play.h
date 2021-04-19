@@ -26,9 +26,9 @@
 extern bool playing, songlooped;
 
 int lds_update( void );
-bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size );
+bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size, unsigned int samplerate );
 void lds_free( void );
-void lds_rewind( void );
+void lds_rewind( unsigned int samplerate );
 
 #define REFRESH 70.0f
 

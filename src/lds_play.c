@@ -85,7 +85,7 @@ static Uint16 numpatch, numposi, mainvolume;
 
 bool playing, songlooped;
 
-bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
+bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size, unsigned int samplerate )
 {
 	SoundBank *sb;
 	
@@ -179,7 +179,7 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 
 	fread_u16_die(patterns, numpatterns, f);
 	
-	lds_rewind();
+	lds_rewind(samplerate);
 	
 	return true;
 }
@@ -196,7 +196,7 @@ void lds_free( void )
 	patterns = NULL;
 }
 
-void lds_rewind( void )
+void lds_rewind( unsigned int samplerate )
 {
 	int i;
 
@@ -208,7 +208,7 @@ void lds_rewind( void )
 	memset(fmchip, 0, sizeof(fmchip));
 
 	/* OPL2 init */
-	opl_init();				/* Reset OPL chip */
+	opl_init(samplerate);				/* Reset OPL chip */
 	opl_write(1, 0x20);
 	opl_write(8, 0);
 	opl_write(0xbd, regbd);

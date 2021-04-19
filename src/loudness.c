@@ -45,7 +45,7 @@ Uint32 channel_len[SFX_CHANNELS] = { 0 };
 Uint8 channel_vol[SFX_CHANNELS];
 
 int sound_init_state = false;
-int freq = 12000 * OUTPUT_QUALITY;
+int freq = 11025 * OUTPUT_QUALITY;
 
 static SDL_AudioCVT audio_cvt; // used for format conversion
 
@@ -76,10 +76,11 @@ bool init_audio( void )
 	}
 	
 	printf("\tobtained  %d Hz, %d channels, %d samples\n", got.freq, got.channels, got.samples);
+	freq = got.freq;
 	
-	SDL_BuildAudioCVT(&audio_cvt, ask.format, ask.channels, ask.freq, got.format, got.channels, got.freq);
+	SDL_BuildAudioCVT(&audio_cvt, ask.format, ask.channels, freq, got.format, got.channels, freq);
 	
-	opl_init();
+	opl_init(freq);
 	
 	SDL_PauseAudio(0); // unpause
 	
@@ -226,7 +227,7 @@ void load_song( unsigned int song_num )
 	if (song_num < song_count)
 	{
 		unsigned int song_size = song_offset[song_num + 1] - song_offset[song_num];
-		lds_load(music_file, song_offset[song_num], song_size);
+		lds_load(music_file, song_offset[song_num], song_size, freq);
 	}
 	else
 	{
