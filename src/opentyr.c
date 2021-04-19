@@ -383,7 +383,7 @@ int main( int argc, const char *argv[] )
 	{
 		printf("initializing SDL audio...\n");
 
-		init_audio();
+		init_audio(xmas);
 
 		load_music();
 

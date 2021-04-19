@@ -42,7 +42,7 @@ extern unsigned int song_playing;
 
 extern bool audio_disabled, music_disabled, samples_disabled;
 
-bool init_audio( void );
+bool init_audio( bool xmas );
 void deinit_audio( void );
 
 void load_music( void );
@@ -56,7 +56,7 @@ void set_volume( unsigned int music, unsigned int sample );
 void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol);
 
 // Used by audio worker
-void worker_init_audio( int samplerate, bool xmas );
+void worker_init_audio( int samplerate, int samples, bool xmas );
 void mix_audio( unsigned char *buffer, int howmuch );
 
 #endif /* LOUDNESS_H */

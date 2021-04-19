@@ -60,7 +60,7 @@ void load_song( unsigned int song_num );
 
 static SDL_AudioCVT audio_cvt; // used for format conversion
 
-bool init_audio( void )
+bool init_audio( bool xmas )
 {
 	if (audio_disabled)
 		return false;
@@ -88,6 +88,10 @@ bool init_audio( void )
 	SDL_BuildAudioCVT(&audio_cvt, ask.format, ask.channels, freq, got.format, got.channels, freq);
 	
 	opl_init(freq);
+	
+#ifdef USE_AUDIO_WORKER
+	worker_init_audio(freq, got.samples, xmas);
+#endif
 	
 	SDL_PauseAudio(0); // unpause
 	
@@ -130,13 +134,35 @@ void deinit_audio( void )
 
 #endif // ifndef AUDIO_WORKER_MAIN
 
-void worker_init_audio( int samplerate, bool xmas )
+void load_music( void )
 {
+	if (music_file == NULL)
+	{
+		music_file = dir_fopen_die(data_dir(), "music.mus", "rb");
+		
+		fread_u16_die(&song_count, 1, music_file);
+		
+		song_offset = malloc((song_count + 1) * sizeof(*song_offset));
+		
+		fread_u32_die(song_offset, song_count, music_file);
+
+		song_offset[song_count] = ftell_eof(music_file);
+	}
+}
+
+#ifndef USE_AUDIO_WORKER
+
+#ifdef AUDIO_WORKER_MAIN
+void worker_init_audio( int samplerate, int samples, bool xmas )
+{
+	(void) samples;
+
 	load_music();
 	JE_loadSndFile("tyrian.snd", xmas ? "voicesc.snd" : "voices.snd");
 	freq = samplerate;
 	opl_init(freq);
 }
+#endif // AUDIO_WORKER_MAIN
 
 void mix_audio( unsigned char *buffer, int howmuch )
 {
@@ -219,22 +245,6 @@ void mix_audio( unsigned char *buffer, int howmuch )
 				channel_buffer[ch] = channel_pos[ch] = NULL;
 			}
 		}
-	}
-}
-
-void load_music( void )
-{
-	if (music_file == NULL)
-	{
-		music_file = dir_fopen_die(data_dir(), "music.mus", "rb");
-		
-		fread_u16_die(&song_count, 1, music_file);
-		
-		song_offset = malloc((song_count + 1) * sizeof(*song_offset));
-		
-		fread_u32_die(song_offset, song_count, music_file);
-
-		song_offset[song_count] = ftell_eof(music_file);
 	}
 }
 
@@ -324,3 +334,4 @@ void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol)
 	SDL_UnlockAudio();
 }
 
+#endif // ifndef USE_AUDIO_WORKER
