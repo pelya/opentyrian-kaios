@@ -138,10 +138,11 @@ all : $(TARGET) $(TARGET_AUDIO)
 
 .PHONY : debug
 debug : CPPFLAGS += -UNDEBUG
-debug : CFLAGS += -O0 -g -fno-lto
-debug : LDFLAGS += -O0 -g -fno-lto
+debug : CFLAGS += -O0 -g4 -fno-lto
+debug : LDFLAGS += -O0 -g4 -fno-lto
 ifneq ($(EMSCRIPTEN),)
-debug : CFLAGS += -s ASSERTIONS=2 # -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
+debug : CFLAGS += -s ASSERTIONS=2 -s WASM=1 # -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
+debug : LDFLAGS += -s WASM=1
 endif
 debug : all
 
@@ -205,10 +206,10 @@ CPPFLAGS_AUDIO := -s USE_SDL=2 \
                   --pre-js appdata.js
 
 $(TARGET_AUDIO) : $(OBJS_AUDIO)
-	$(CC) $(ALL_CFLAGS) $(CPPFLAGS_AUDIO) -o $@ $^
+	$(CC) $(CPPFLAGS_AUDIO) $(ALL_CFLAGS) -o $@ $^
 
 -include $(DEPS_AUDIO)
 
 $(OBJDIR_AUDIO)/%.o : src/%.c
 	@mkdir -p "$(dir $@)"
-	$(CC) $(ALL_CFLAGS) $(CPPFLAGS_AUDIO) -c -o $@ $<
+	$(CC) $(CPPFLAGS_AUDIO) $(ALL_CFLAGS) -c -o $@ $<
