@@ -31,12 +31,89 @@
 
 #include <emscripten.h>
 
-void w_init(char *data, int size, void *arg)
+void w_play_song(char *data, int size, void *arg)
 {
+	(void) data;
+	(void) size;
+
+	play_song((Uint32) arg);
 }
 
-void w_cb(char *data, int size, void *arg)
+void w_restart_song(char *data, int size, void *arg)
 {
+	(void) data;
+	(void) size;
+	(void) arg;
+
+	restart_song();
+}
+
+void w_stop_song(char *data, int size, void *arg)
+{
+	(void) data;
+	(void) size;
+	(void) arg;
+
+	stop_song();
+}
+
+void w_fade_song(char *data, int size, void *arg)
+{
+	(void) data;
+	(void) size;
+	(void) arg;
+
+	fade_song();
+}
+
+void w_set_volume(char *data, int size, void *arg)
+{
+	(void) data;
+	(void) size;
+
+	Uint32 iarg = (Uint32) arg;
+	int music = iarg & 0x0000ffff;
+	int samples = (iarg & 0xffff0000) / 0x10000;
+	music_disabled = (music == 0);
+	samples_disabled = (samples == 0);
+	set_volume(music, samples);
+}
+
+void w_play_sample(char *data, int size, void *arg)
+{
+	(void) data;
+	(void) size;
+
+	Uint32 iarg = (Uint32) arg;
+	JE_byte samplenum = iarg & 0x000000ff;
+	JE_byte chan = (iarg & 0x0000ff00) / 0x100;
+	JE_byte vol = (iarg & 0x00ff0000) / 0x10000;
+	JE_multiSamplePlay(samplenum, chan, vol);
+}
+
+void w_init(char *data, int size, void *arg)
+{
+	(void) data;
+	(void) size;
+
+	Uint32 iarg = (Uint32) arg;
+	int samplerate = iarg & 0x00ffffff;
+	bool xmas = (iarg & 0xff000000) != 0;
+	worker_init_audio(samplerate, xmas);
+}
+
+void w_mix(char *data, int size, void *arg)
+{
+	(void) arg;
+
+	mix_audio((unsigned char *) data, size);
+	emscripten_worker_respond(data, size);
+}
+
+// Stubs
+void JE_tyrianHalt( JE_byte code )
+{
+	printf("Error: called JE_tyrianHalt(%d)\n", code);
 }
 
 #endif // AUDIO_WORKER_MAIN

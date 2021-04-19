@@ -31,7 +31,7 @@ float music_volume = 0, sample_volume = 0;
 bool music_stopped = true;
 unsigned int song_playing = 0;
 
-bool audio_disabled = false, music_disabled = true, samples_disabled = false;
+bool audio_disabled = false, music_disabled = false, samples_disabled = false;
 
 /* SYN: These shouldn't be used outside this file. Hands off! */
 FILE *music_file = NULL;
@@ -47,11 +47,18 @@ Uint8 channel_vol[SFX_CHANNELS];
 int sound_init_state = false;
 int freq = 11025 * OUTPUT_QUALITY;
 
-static SDL_AudioCVT audio_cvt; // used for format conversion
-
-void audio_cb( void *userdata, unsigned char *feedme, int howmuch );
+void sdl_audio_cb( void *userdata, unsigned char *feedme, int howmuch );
 
 void load_song( unsigned int song_num );
+
+#ifdef AUDIO_WORKER_MAIN
+#define SDL_LockAudio()
+#define SDL_UnlockAudio()
+#endif
+
+#ifndef AUDIO_WORKER_MAIN
+
+static SDL_AudioCVT audio_cvt; // used for format conversion
 
 bool init_audio( void )
 {
@@ -64,7 +71,7 @@ bool init_audio( void )
 	ask.format = (BYTES_PER_SAMPLE == 2) ? AUDIO_S16SYS : AUDIO_S8;
 	ask.channels = 1;
 	ask.samples = 8192; // 2048;
-	ask.callback = audio_cb;
+	ask.callback = sdl_audio_cb;
 	
 	printf("\trequested %d Hz, %d channels, %d samples\n", ask.freq, ask.channels, ask.samples);
 	
@@ -87,7 +94,7 @@ bool init_audio( void )
 	return true;
 }
 
-void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
+void sdl_audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 {
 	(void)user_data;
 	
@@ -96,9 +103,46 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 	audio_cvt.buf = sdl_buffer;
 	audio_cvt.len = howmuch;
 	
+	mix_audio(sdl_buffer, howmuch);
+	
+	// do conversion
+	SDL_ConvertAudio(&audio_cvt);
+}
+
+void deinit_audio( void )
+{
+	if (audio_disabled)
+		return;
+	
+	SDL_PauseAudio(1); // pause
+	
+	SDL_CloseAudio();
+	
+	for (unsigned int i = 0; i < SFX_CHANNELS; i++)
+	{
+		free(channel_buffer[i]);
+		channel_buffer[i] = channel_pos[i] = NULL;
+		channel_len[i] = 0;
+	}
+	
+	lds_free();
+}
+
+#endif // ifndef AUDIO_WORKER_MAIN
+
+void worker_init_audio( int samplerate, bool xmas )
+{
+	load_music();
+	JE_loadSndFile("tyrian.snd", xmas ? "voicesc.snd" : "voices.snd");
+	freq = samplerate;
+	opl_init(freq);
+}
+
+void mix_audio( unsigned char *buffer, int howmuch )
+{
 	static long ct = 0;
 	
-	SAMPLE_TYPE *feedme = (SAMPLE_TYPE *)sdl_buffer;
+	SAMPLE_TYPE *feedme = (SAMPLE_TYPE *)buffer;
 
 	if (!music_disabled && !music_stopped)
 	{
@@ -176,30 +220,7 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 			}
 		}
 	}
-	
-	// do conversion
-	SDL_ConvertAudio(&audio_cvt);
 }
-
-void deinit_audio( void )
-{
-	if (audio_disabled)
-		return;
-	
-	SDL_PauseAudio(1); // pause
-	
-	SDL_CloseAudio();
-	
-	for (unsigned int i = 0; i < SFX_CHANNELS; i++)
-	{
-		free(channel_buffer[i]);
-		channel_buffer[i] = channel_pos[i] = NULL;
-		channel_len[i] = 0;
-	}
-	
-	lds_free();
-}
-
 
 void load_music( void )
 {

@@ -55,5 +55,9 @@ void set_volume( unsigned int music, unsigned int sample );
 
 void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol);
 
+// Used by audio worker
+void worker_init_audio( int samplerate, bool xmas );
+void mix_audio( unsigned char *buffer, int howmuch );
+
 #endif /* LOUDNESS_H */
 

@@ -49,10 +49,12 @@ gamesdir ?= $(datadir)/games
 TARGET := opentyrian
 OBJDIR := obj
 APPDATA := data
+TARGET_AUDIO :=
 ifneq ($(EMSCRIPTEN),)
 TARGET := app.js
 OBJDIR := obj-js
 APPDATA := appdata.js
+TARGET_AUDIO := audio.js
 endif
 
 SRCS := $(wildcard src/*.c)
@@ -181,11 +183,9 @@ $(APPDATA):
 
 # AUDIO JS WORKER ###############################################################
 
-TARGET_AUDIO := audio.js
-
 OBJDIR_AUDIO := obj-audio
 
-SRCS_AUDIO := src/audio_worker.c src/loudness.c src/lds_play.c src/nortsong.c src/opl.c
+SRCS_AUDIO := src/audio_worker.c src/loudness.c src/lds_play.c src/nortsong.c src/opl.c src/file.c
 OBJS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.o)
 DEPS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.d)
 
@@ -198,8 +198,10 @@ CPPFLAGS_AUDIO := -s USE_SDL=2 \
                   -s FORCE_FILESYSTEM=1 \
                   -s ASSERTIONS=0 \
                   -s BUILD_AS_WORKER=1 \
+                  -s EXPORTED_FUNCTIONS="['_w_play_song','_w_restart_song','_w_stop_song','_w_fade_song','_w_set_volume','_w_play_sample','_w_init','_w_mix']" \
                   -D AUDIO_WORKER_MAIN=1 \
-                  -s EXPORTED_FUNCTIONS="['_w_init','_w_cb']" \
+                  -D TARGET_$(PLATFORM) \
+                  -D TYRIAN_DIR='"$(TYRIAN_DIR)"' \
                   --pre-js appdata.js
 
 $(TARGET_AUDIO) : $(OBJS_AUDIO)
