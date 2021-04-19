@@ -132,7 +132,7 @@ ALL_LDLIBS = -lm \
 ###
 
 .PHONY : all
-all : $(TARGET)
+all : $(TARGET) $(TARGET_AUDIO)
 
 .PHONY : debug
 debug : CPPFLAGS += -UNDEBUG
