@@ -2074,7 +2074,7 @@ draw_player_shot_loop_end:
 				else   /*Lightning*/
 					temp3 = fxPlayVol / 2;
 
-				JE_multiSamplePlay(digiFx[temp-1], fxSize[temp-1], temp2, temp3);
+				JE_multiSamplePlay(temp, temp2, temp3);
 
 				soundQueue[temp2] = S_NONE;
 			}

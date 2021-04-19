@@ -2667,7 +2667,7 @@ static void DE_RunTickPlaySounds( void )
 				tempVolume = fxPlayVol / 2;
 			}
 
-			JE_multiSamplePlay(digiFx[tempSampleIndex-1], fxSize[tempSampleIndex-1], i, tempVolume);
+			JE_multiSamplePlay(tempSampleIndex, i, tempVolume);
 			soundQueue[i] = S_NONE;
 		}
 	}

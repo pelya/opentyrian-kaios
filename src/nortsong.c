@@ -161,7 +161,7 @@ void JE_loadSndFile( const char *effects_sndfile, const char *voices_sndfile )
 
 void JE_playSampleNum( JE_byte samplenum )
 {
-	JE_multiSamplePlay(digiFx[samplenum-1], fxSize[samplenum-1], 0, fxPlayVol);
+	JE_multiSamplePlay(samplenum, 0, fxPlayVol);
 }
 
 void JE_calcFXVol( void ) // TODO: not sure *exactly* what this does

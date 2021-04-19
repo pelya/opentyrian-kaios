@@ -53,7 +53,7 @@ void fade_song( void );
 
 void set_volume( unsigned int music, unsigned int sample );
 
-void JE_multiSamplePlay(JE_byte *buffer, JE_word size, JE_byte chan, JE_byte vol);
+void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol);
 
 #endif /* LOUDNESS_H */
 
