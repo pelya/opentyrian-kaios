@@ -456,11 +456,11 @@ void JE_tyrianHalt( JE_byte code )
 		JE_saveConfiguration();
 	}
 
-	sys_exit_app();
-
 	deinit_audio();
 	deinit_video();
 	deinit_joysticks();
+
+	sys_exit_app(); // Does not return
 
 	/* TODO: NETWORK */
 
