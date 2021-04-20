@@ -192,6 +192,7 @@ void play_song( unsigned int song_num )
 	emscripten_call_worker(worker, "w_play_song", (char *) data, sizeof(data), NULL, NULL);
 
 	song_playing = song_num;
+	playing = true;
 }
 
 void restart_song( void )
@@ -202,6 +203,8 @@ void restart_song( void )
 void stop_song( void )
 {
 	emscripten_call_worker(worker, "w_stop_song", NULL, 0, NULL, NULL);
+
+	playing = false;
 }
 
 void fade_song( void )
