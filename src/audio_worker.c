@@ -58,7 +58,7 @@ void w_mix(char *data, int size)
 	(void) data;
 	(void) size;
 
-	printf("w_mix data %p size %d\n", (void *) data, size);
+	//printf("w_mix data %p size %d\n", (void *) data, size);
 	mix_audio(audio_buffer, audio_buffer_size);
 	emscripten_worker_respond((char *) audio_buffer, audio_buffer_size);
 }
@@ -68,7 +68,7 @@ void w_play_song(char *data, int size)
 	(void) size;
 	Uint32 *args = (Uint32 *) data;
 
-	printf("w_play_song %u\n", args[0]);
+	//printf("w_play_song %u\n", args[0]);
 	play_song(args[0]);
 }
 
@@ -106,7 +106,7 @@ void w_set_volume(char *data, int size)
 
 	music_disabled = (music == 0);
 	samples_disabled = (samples == 0);
-	printf("w_set_volume %u %u music_disabled %u samples_disabled %u\n", music, samples, music_disabled, samples_disabled);
+	//printf("w_set_volume %u %u music_disabled %u samples_disabled %u\n", music, samples, music_disabled, samples_disabled);
 	set_volume(music, samples);
 }
 
@@ -166,14 +166,14 @@ void worker_init_audio( int samplerate, int samples, bool xmas )
 void mix_audio_result(char *data, int size, void *arg)
 {
 	(void) arg;
-	printf("mix_audio_result size %u\n", size);
+	//printf("mix_audio_result size %u\n", size);
 	memcpy(audio_buffer, data, size);
 	audio_buffer_ready = true;
 }
 
 void mix_audio( unsigned char *buffer, int howmuch )
 {
-	printf("mix_audio buffer ready %u buffer size %u\n", audio_buffer_ready, howmuch);
+	//printf("mix_audio buffer ready %u buffer size %u\n", audio_buffer_ready, howmuch);
 	if (audio_buffer_ready)
 	{
 		audio_buffer_ready = false;
@@ -216,7 +216,7 @@ void set_volume( unsigned int music, unsigned int sample )
 	if (samples_disabled)
 		sample = 0;
 	Uint32 data[2] = { music, sample };
-	printf("set_volume %d %d\n", music, sample);
+	//printf("set_volume %d %d\n", music, sample);
 	emscripten_call_worker(worker, "w_set_volume", (char *) data, sizeof(data), NULL, NULL);
 }
 
