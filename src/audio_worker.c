@@ -188,41 +188,28 @@ void mix_audio( unsigned char *buffer, int howmuch )
 
 void play_song( unsigned int song_num )
 {
-	printf("%s\n", __FUNCTION__);
 	Uint32 iarg = song_num;
-	if (worker == -1)
-		return;
 	emscripten_call_worker(worker, "w_play_song", NULL, 0, NULL, (void *) iarg);
 }
 
 void restart_song( void )
 {
-	printf("%s\n", __FUNCTION__);
-	if (worker == -1)
-		return;
 	emscripten_call_worker(worker, "w_restart_song", NULL, 0, NULL, NULL);
 }
 
 void stop_song( void )
 {
-	printf("%s\n", __FUNCTION__);
-	if (worker == -1)
-		return;
 	emscripten_call_worker(worker, "w_stop_song", NULL, 0, NULL, NULL);
 }
 
 void fade_song( void )
 {
-	printf("%s\n", __FUNCTION__);
-	if (worker == -1)
-		return;
 	emscripten_call_worker(worker, "w_fade_song", NULL, 0, NULL, NULL);
 }
 
 void set_volume( unsigned int music, unsigned int sample )
 {
 	Uint32 iarg = 0;
-	printf("%s\n", __FUNCTION__);
 	if (worker == -1)
 		return;
 	if (music_disabled)
@@ -236,9 +223,6 @@ void set_volume( unsigned int music, unsigned int sample )
 void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol)
 {
 	Uint32 iarg = (samplenum & 0x000000ff) | ((chan * 0x100) & 0x0000ff00) | ((vol * 0x10000) & 0x00ff0000);
-	printf("%s\n", __FUNCTION__);
-	if (worker == -1)
-		return;
 	emscripten_call_worker(worker, "w_play_sample", NULL, 0, NULL, (void *) iarg);
 }
 
