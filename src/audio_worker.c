@@ -155,10 +155,10 @@ void worker_init_audio( int samplerate, int samples, bool xmas )
 	memset(audio_buffer, 0, samples * BYTES_PER_SAMPLE);
 
 	printf("Starting audio worker: samplerate %u samples %u xmas %u\n", samplerate, samples, xmas);
-
 	worker = emscripten_create_worker("audio.js");
-	emscripten_call_worker(worker, "_w_init", params, sizeof(params), NULL, NULL);
+	emscripten_call_worker(worker, "w_init", params, sizeof(params), NULL, NULL);
 	audio_buffer_ready = true; // Start the first mix iteration
+	printf("Started audio worker: ID %u\n", worker);
 }
 
 // This code performs double copy, first it copies data to audio_buffer,
@@ -177,7 +177,7 @@ void mix_audio( unsigned char *buffer, int howmuch )
 	if (audio_buffer_ready)
 	{
 		audio_buffer_ready = false;
-		emscripten_call_worker(worker, "_w_mix", NULL, 0, mix_audio_result, (void *) howmuch);
+		emscripten_call_worker(worker, "w_mix", NULL, 0, mix_audio_result, (void *) howmuch);
 		memcpy(buffer, audio_buffer, howmuch);
 	}
 	else
@@ -188,40 +188,58 @@ void mix_audio( unsigned char *buffer, int howmuch )
 
 void play_song( unsigned int song_num )
 {
+	printf("%s\n", __FUNCTION__);
 	Uint32 iarg = song_num;
-	emscripten_call_worker(worker, "_w_play_song", NULL, 0, NULL, (void *) iarg);
+	if (worker == -1)
+		return;
+	emscripten_call_worker(worker, "w_play_song", NULL, 0, NULL, (void *) iarg);
 }
 
 void restart_song( void )
 {
-	emscripten_call_worker(worker, "_w_restart_song", NULL, 0, NULL, NULL);
+	printf("%s\n", __FUNCTION__);
+	if (worker == -1)
+		return;
+	emscripten_call_worker(worker, "w_restart_song", NULL, 0, NULL, NULL);
 }
 
 void stop_song( void )
 {
-	emscripten_call_worker(worker, "_w_stop_song", NULL, 0, NULL, NULL);
+	printf("%s\n", __FUNCTION__);
+	if (worker == -1)
+		return;
+	emscripten_call_worker(worker, "w_stop_song", NULL, 0, NULL, NULL);
 }
 
 void fade_song( void )
 {
-	emscripten_call_worker(worker, "_w_fade_song", NULL, 0, NULL, NULL);
+	printf("%s\n", __FUNCTION__);
+	if (worker == -1)
+		return;
+	emscripten_call_worker(worker, "w_fade_song", NULL, 0, NULL, NULL);
 }
 
 void set_volume( unsigned int music, unsigned int sample )
 {
 	Uint32 iarg = 0;
+	printf("%s\n", __FUNCTION__);
+	if (worker == -1)
+		return;
 	if (music_disabled)
 		music = 0;
 	if (samples_disabled)
 		sample = 0;
 	iarg = (music & 0x0000ffff) | ((sample * 0x10000) & 0xffff0000);
-	emscripten_call_worker(worker, "_w_set_volume", NULL, 0, NULL, (void *) iarg);
+	emscripten_call_worker(worker, "w_set_volume", NULL, 0, NULL, (void *) iarg);
 }
 
 void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol)
 {
 	Uint32 iarg = (samplenum & 0x000000ff) | ((chan * 0x100) & 0x0000ff00) | ((vol * 0x10000) & 0x00ff0000);
-	emscripten_call_worker(worker, "_w_play_sample", NULL, 0, NULL, (void *) iarg);
+	printf("%s\n", __FUNCTION__);
+	if (worker == -1)
+		return;
+	emscripten_call_worker(worker, "w_play_sample", NULL, 0, NULL, (void *) iarg);
 }
 
 #endif // USE_AUDIO_WORKER

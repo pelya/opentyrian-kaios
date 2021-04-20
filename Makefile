@@ -199,7 +199,7 @@ CPPFLAGS_AUDIO := -s USE_SDL=2 \
                   -s FORCE_FILESYSTEM=1 \
                   -s ASSERTIONS=0 \
                   -s BUILD_AS_WORKER=1 \
-                  -s EXPORTED_FUNCTIONS="['_w_play_song','_w_restart_song','_w_stop_song','_w_fade_song','_w_set_volume','_w_play_sample','_w_init','_w_mix']" \
+                  -s EXPORTED_FUNCTIONS="['_w_init','_w_mix','_w_play_song','_w_restart_song','_w_stop_song','_w_fade_song','_w_set_volume','_w_play_sample']" \
                   -D AUDIO_WORKER_MAIN=1 \
                   -D TARGET_$(PLATFORM) \
                   -D TYRIAN_DIR='"$(TYRIAN_DIR)"' \
