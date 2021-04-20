@@ -151,7 +151,6 @@ void sys_exit_app(void)
 				document.getElementById('canvas').style.height = String(sys_shutdown_anim) + '%';
 				document.getElementById('canvas').style.marginTop = String((100 - sys_shutdown_anim) / 2) + '%';
 			}
-			if () {
 		}, 20);
 	});
 #endif // EMSCRIPTEN
