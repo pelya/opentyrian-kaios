@@ -44,12 +44,12 @@ uint scaler;
 const struct Scalers scalers[] =
 {
 	{ 1 * vga_width, 1 * vga_height, nn_16,      nn_32,      "None" },
-#if 0
-	{ 2 * vga_width, 2 * vga_height, nn_16,      nn_32,      "2x" },
+	//{ 2 * vga_width, 2 * vga_height, nn_16,      nn_32,      "2x" },
 	{ 2 * vga_width, 2 * vga_height, scale2x_16, scale2x_32, "Scale2x" },
-	{ 2 * vga_width, 2 * vga_height, NULL,       hq2x_32,    "hq2x" },
-	{ 3 * vga_width, 3 * vga_height, nn_16,      nn_32,      "3x" },
+	//{ 3 * vga_width, 3 * vga_height, nn_16,      nn_32,      "3x" },
 	{ 3 * vga_width, 3 * vga_height, scale3x_16, scale3x_32, "Scale3x" },
+#if 0
+	{ 2 * vga_width, 2 * vga_height, NULL,       hq2x_32,    "hq2x" },
 	{ 3 * vga_width, 3 * vga_height, NULL,       hq3x_32,    "hq3x" },
 	{ 4 * vga_width, 4 * vga_height, nn_16,      nn_32,      "4x" },
 	{ 4 * vga_width, 4 * vga_height, NULL,       hq4x_32,    "hq4x" },
@@ -166,7 +166,6 @@ void nn_16( SDL_Surface *src_surface, SDL_Texture *dst_texture )
 
 	SDL_UnlockTexture(dst_texture);
 }
-
 
 void scale2x_32( SDL_Surface *src_surface, SDL_Texture *dst_texture )
 {
@@ -436,4 +435,3 @@ void scale3x_16( SDL_Surface *src_surface, SDL_Texture *dst_texture )
 
 	SDL_UnlockTexture(dst_texture);
 }
-
