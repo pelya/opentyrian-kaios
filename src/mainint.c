@@ -1230,9 +1230,11 @@ JE_boolean JE_inGameSetup( void )
 					{
 						case 1:
 							music_disabled = !music_disabled;
+							set_volume(tyrMusicVolume, fxVolume);
 							break;
 						case 2:
 							samples_disabled = !samples_disabled;
+							set_volume(tyrMusicVolume, fxVolume);
 							break;
 						case 3:
 						case 4:
@@ -1284,12 +1286,13 @@ JE_boolean JE_inGameSetup( void )
 							if (music_disabled)
 							{
 								music_disabled = false;
+								set_volume(tyrMusicVolume, fxVolume);
 								restart_song();
 							}
 							break;
 						case 2:
-							JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, -12);
 							samples_disabled = false;
+							JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, -12);
 							break;
 						case 3:
 							if (--processorType < 1)
@@ -1321,12 +1324,13 @@ JE_boolean JE_inGameSetup( void )
 							if (music_disabled)
 							{
 								music_disabled = false;
+								set_volume(tyrMusicVolume, fxVolume);
 								restart_song();
 							}
 							break;
 						case 2:
-							JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, 12);
 							samples_disabled = false;
+							JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, 12);
 							break;
 						case 3:
 							if (++processorType > 4)

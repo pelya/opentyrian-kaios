@@ -1132,6 +1132,7 @@ void JE_itemScreen( void )
 					if (music_disabled)
 					{
 						music_disabled = false;
+						set_volume(tyrMusicVolume, fxVolume);
 						restart_song();
 					}
 
@@ -1510,12 +1511,13 @@ void JE_itemScreen( void )
 						if (music_disabled)
 						{
 							music_disabled = false;
+							set_volume(tyrMusicVolume, fxVolume);
 							restart_song();
 						}
 						break;
 					case 5:
-						JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, -12);
 						samples_disabled = false;
+						JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, -12);
 						break;
 					}
 					break;
@@ -1606,12 +1608,13 @@ void JE_itemScreen( void )
 						if (music_disabled)
 						{
 							music_disabled = false;
+							set_volume(tyrMusicVolume, fxVolume);
 							restart_song();
 						}
 						break;
 					case 5:
-						JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, 12);
 						samples_disabled = false;
+						JE_changeVolume(&tyrMusicVolume, 0, &fxVolume, 12);
 						break;
 					}
 					break;
@@ -2686,6 +2689,7 @@ void JE_menuFunction( JE_byte select )
 			break;
 		case 4:
 			music_disabled = !music_disabled;
+			set_volume(tyrMusicVolume, fxVolume);
 			if (music_disabled)
 			{
 				stop_song();
@@ -2697,6 +2701,7 @@ void JE_menuFunction( JE_byte select )
 			break;
 		case 5:
 			samples_disabled = !samples_disabled;
+			set_volume(tyrMusicVolume, fxVolume);
 			break;
 		case 6:
 			curMenu = MENU_JOYSTICK_CONFIG;
