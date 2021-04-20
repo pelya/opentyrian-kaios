@@ -143,14 +143,15 @@ void sys_exit_app(void)
 	EM_ASM({
 		var sys_shutdown_anim = 100;
 		setInterval(function() {
-			if (sys_fs_sync_is_done) {
+			sys_shutdown_anim -= 20;
+			if (sys_fs_sync_is_done && sys_shutdown_anim > -200) {
 				window.open('', '_self').close();
 			}
 			if (sys_shutdown_anim > 0) {
-				sys_shutdown_anim -= 20;
+				document.getElementById('canvas').style.height = String(sys_shutdown_anim) + '%';
+				document.getElementById('canvas').style.marginTop = String((100 - sys_shutdown_anim) / 2) + '%';
 			}
-			document.getElementById('canvas').style.height = String(sys_shutdown_anim) + '%';
-			document.getElementById('canvas').style.marginTop = String((100 - sys_shutdown_anim) / 2) + '%';
+			if () {
 		}, 20);
 	});
 #endif // EMSCRIPTEN
