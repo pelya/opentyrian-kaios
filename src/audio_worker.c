@@ -190,6 +190,8 @@ void play_song( unsigned int song_num )
 {
 	Uint32 data[1] = { song_num };
 	emscripten_call_worker(worker, "w_play_song", (char *) data, sizeof(data), NULL, NULL);
+
+	song_playing = song_num;
 }
 
 void restart_song( void )
