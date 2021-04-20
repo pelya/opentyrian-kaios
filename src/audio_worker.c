@@ -164,7 +164,8 @@ void worker_init_audio( int samplerate, int samples, bool xmas )
 // This code performs double copy, first it copies data to audio_buffer,
 // and then from audio_buffer to the buffer in mix_audio().
 // And there is a third copy inside Emscripten code,
-// it copies worker response from JS Uint8Array into C malloc()-ed buffer
+// it copies worker response from JS Uint8Array into C heap.
+// And after that, it's copied for the fourth time from C heap into JS audio callback.
 void mix_audio_result(char *data, int size, void *arg)
 {
 	(void) arg;
