@@ -138,11 +138,11 @@ all : $(TARGET) $(TARGET_AUDIO)
 
 .PHONY : debug
 debug : CPPFLAGS += -UNDEBUG
-debug : CFLAGS += -O0 -g4 -fno-lto
-debug : LDFLAGS += -O0 -g4 -fno-lto
+debug : CFLAGS += -O0 -g -fno-lto
+debug : LDFLAGS += -O0 -g -fno-lto
 ifneq ($(EMSCRIPTEN),)
-debug : CFLAGS += -s ASSERTIONS=2 -s WASM=1 # -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
-debug : LDFLAGS += -s WASM=1
+debug : CFLAGS += -g4 -s ASSERTIONS=2 -s WASM=1 # -fsanitize=undefined -s SAFE_HEAP=1 -s WASM=1
+debug : LDFLAGS += -g4 -s WASM=1
 endif
 debug : all
 
