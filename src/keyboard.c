@@ -221,6 +221,28 @@ void service_SDL_events( JE_boolean clear_new )
 				lastkey_scan = ev.key.keysym.scancode;
 				lastkey_mod = ev.key.keysym.mod;
 				keydown = true;
+
+				char c[2] = { 0, 0 };
+
+				if (lastkey_scan >= SDL_SCANCODE_A && lastkey_scan <= SDL_SCANCODE_Z)
+				{
+					c[0] = 'a' + lastkey_scan - SDL_SCANCODE_A;
+					if (lastkey_mod | KMOD_SHIFT) c[0] = 'A' + lastkey_scan - SDL_SCANCODE_A;
+				}
+				if (lastkey_scan >= SDL_SCANCODE_0 && lastkey_scan <= SDL_SCANCODE_9)
+					c[0] = '0' + lastkey_scan - SDL_SCANCODE_0;
+				if (lastkey_scan >= SDL_SCANCODE_SPACE)
+					c[0] = ' ';
+
+				if (c[0])
+				{
+					int len = strlen(last_text);
+					if (!new_text || len > 10)
+						len = 0;
+					SDL_strlcpy(last_text + len, c, COUNTOF(last_text) - len);
+					new_text = true;
+				}
+
 				return;
 			case SDL_KEYUP:
 				keysactive[ev.key.keysym.scancode] = 0;
