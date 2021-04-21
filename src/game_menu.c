@@ -786,6 +786,11 @@ void JE_itemScreen( void )
 					sprintf(temp, "%s %d", inputDevices[2], inputDevice[i] - 2);
 				else
 					sprintf(temp, "%s", inputDevices[inputDevice[i] - 1]);
+				// KaiOS does not have a mouse
+				if (!has_mouse && strcmp(temp, "Keyboard") == 0)
+					sprintf(temp, "D-pad");
+				if (!has_mouse && strcmp(temp, "Mouse") == 0)
+					sprintf(temp, "Numeric keys");
 				JE_dString(VGAScreen, 186, 38 + 2 * (i + 1) * 16, temp, SMALL_FONT_SHAPES);
 			}
 		}
