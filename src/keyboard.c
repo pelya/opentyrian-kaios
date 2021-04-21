@@ -222,17 +222,19 @@ void service_SDL_events( JE_boolean clear_new )
 				lastkey_mod = ev.key.keysym.mod;
 				keydown = true;
 
+				// Poor man's text input
 				char c[2] = { 0, 0 };
+				SDL_Keycode k = SDL_GetKeyFromScancode(lastkey_scan);
 
-				if (lastkey_scan >= SDL_SCANCODE_A && lastkey_scan <= SDL_SCANCODE_Z)
+				if (k >= 'a' && k <= 'z')
 				{
-					c[0] = 'a' + lastkey_scan - SDL_SCANCODE_A;
-					if (lastkey_mod | KMOD_SHIFT) c[0] = 'A' + lastkey_scan - SDL_SCANCODE_A;
+					c[0] = k;
+					if (lastkey_mod | KMOD_SHIFT) c[0] = c[0] + 'A' - 'a';
 				}
-				if (lastkey_scan >= SDL_SCANCODE_0 && lastkey_scan <= SDL_SCANCODE_9)
-					c[0] = '0' + lastkey_scan - SDL_SCANCODE_0;
-				if (lastkey_scan >= SDL_SCANCODE_SPACE)
-					c[0] = ' ';
+				if (k >= '0' && k <= '9')
+					c[0] = k;
+				if (k == ' ' || k == ',' || k == '.' || k == '/' || k == '[' || k == ']' || k == ';' || k == '\'')
+					c[0] = k;
 
 				if (c[0])
 				{
