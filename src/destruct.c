@@ -637,6 +637,57 @@ static void JE_introScreen( void )
 	JE_showVGA();
 }
 
+static void JE_numPlayersSelect( void )
+{
+	memcpy(VGAScreen2->pixels, VGAScreen->pixels, VGAScreen2->h * VGAScreen2->pitch);
+
+	// Draw the menu and fade us in
+	JE_textShade(VGAScreen, JE_fontCenter("One player", TINY_FONT), 82, "One player", 12, (destruct_player[PLAYER_LEFT].is_cpu) * 4, FULL_SHADE);
+	JE_textShade(VGAScreen, JE_fontCenter("Two players", TINY_FONT), 82 + 12, "Two players", 12, (!destruct_player[PLAYER_LEFT].is_cpu) * 4, FULL_SHADE);
+
+	JE_showVGA();
+	fade_palette(colors, 15, 0, 255);
+
+	/* Get input in a loop. */
+	while(1)
+	{
+		/* Re-draw the menu every iteration */
+		JE_textShade(VGAScreen, JE_fontCenter("One player", TINY_FONT), 82, "One player", 12, (destruct_player[PLAYER_LEFT].is_cpu) * 4, FULL_SHADE);
+		JE_textShade(VGAScreen, JE_fontCenter("Two players", TINY_FONT), 82 + 12, "Two players", 12, (!destruct_player[PLAYER_LEFT].is_cpu) * 4, FULL_SHADE);
+		JE_showVGA();
+
+		/* Grab keys */
+		newkey = false;
+		do {
+			service_SDL_events(false);
+			SDL_Delay(16);
+		} while(!newkey);
+
+		/* See what was pressed */
+		if (keysactive[SDL_SCANCODE_ESCAPE] || keysactive[SDL_SCANCODE_BACKSPACE])
+		{
+			/* User is quitting, return failure */
+			break;
+		}
+		if (keysactive[SDL_SCANCODE_RETURN])
+		{
+			break; /* User has selected, return choice */
+		}
+		if (keysactive[SDL_SCANCODE_UP])
+		{
+			destruct_player[PLAYER_LEFT].is_cpu = !destruct_player[PLAYER_LEFT].is_cpu;
+		}
+		if (keysactive[SDL_SCANCODE_DOWN])
+		{
+			destruct_player[PLAYER_LEFT].is_cpu = !destruct_player[PLAYER_LEFT].is_cpu;
+		}
+	}
+
+	fade_black(15);
+	memcpy(VGAScreen->pixels, VGAScreen2->pixels, VGAScreen->h * VGAScreen->pitch);
+	JE_showVGA();
+}
+
 /* JE_modeSelect
  *
  * This function prints the DESTRUCT mode selection menu.
@@ -728,6 +779,7 @@ static enum de_mode_t JE_modeSelect( void )
 	fade_black(15);
 	memcpy(VGAScreen->pixels, VGAScreen2->pixels, VGAScreen->h * VGAScreen->pitch);
 	JE_showVGA();
+	JE_numPlayersSelect();
 	return(mode);
 }
 
@@ -1485,13 +1537,6 @@ static enum de_state_t DE_RunTick( void )
 	{
 		destruct_player[PLAYER_RIGHT].is_cpu = !destruct_player[PLAYER_RIGHT].is_cpu;
 		keysactive[SDL_SCANCODE_F11] = false;
-	}
-	if (!destruct_player[PLAYER_LEFT].is_cpu
-		&& (keysactive[SDL_SCANCODE_KP_ENTER]
-		|| keysactive[SDL_SCANCODE_AC_BACK]
-		|| keysactive[SDL_SCANCODE_AC_FORWARD]))
-	{
-		destruct_player[PLAYER_LEFT].is_cpu = false;
 	}
 	if (keysactive[SDL_SCANCODE_P])
 	{
