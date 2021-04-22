@@ -404,8 +404,7 @@ static void scale_and_flip( SDL_Surface *src_surface )
 	// Save output rect to be used by mouse functions
 	last_output_rect = dst_rect;
 
-	int counter = 10;
-	while (audio_thread_overloaded && counter-- > 0)
+	if (audio_thread_overloaded)
 		SDL_Delay(50);
 }
 
