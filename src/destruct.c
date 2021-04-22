@@ -779,7 +779,8 @@ static enum de_mode_t JE_modeSelect( void )
 	fade_black(15);
 	memcpy(VGAScreen->pixels, VGAScreen2->pixels, VGAScreen->h * VGAScreen->pitch);
 	JE_showVGA();
-	JE_numPlayersSelect();
+	if (mode != MODE_NONE)
+		JE_numPlayersSelect();
 	return(mode);
 }
 
