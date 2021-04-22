@@ -132,8 +132,10 @@ void JE_tyrianHalt( JE_byte code )
 #ifdef USE_AUDIO_WORKER
 
 static worker_handle worker = -1;
+// Double-buffered audio
 static unsigned char *audio_buffer = NULL;
-static bool audio_buffer_ready = false;
+static unsigned char *audio_buffer2 = NULL;
+static int audio_buffer_count = 0;
 
 void worker_init_audio( int samplerate, int samples, bool xmas )
 {
@@ -149,11 +151,13 @@ void worker_init_audio( int samplerate, int samples, bool xmas )
 
 	audio_buffer = malloc(samples * BYTES_PER_SAMPLE);
 	memset(audio_buffer, 0, samples * BYTES_PER_SAMPLE);
+	audio_buffer2 = malloc(samples * BYTES_PER_SAMPLE);
+	memset(audio_buffer2, 0, samples * BYTES_PER_SAMPLE);
 
 	printf("Starting audio worker: samplerate %u samples %u xmas %u\n", samplerate, samples, xmas);
 	worker = emscripten_create_worker("audio.js");
 	emscripten_call_worker(worker, "w_init", params, sizeof(params), NULL, NULL);
-	audio_buffer_ready = true; // Start the first mix iteration
+	audio_buffer_count = 2; // Start the first mix iteration
 	printf("Started audio worker: ID %u\n", worker);
 	set_volume(tyrMusicVolume, fxVolume);
 }
@@ -167,24 +171,38 @@ void mix_audio_result(char *data, int size, void *arg)
 {
 	(void) arg;
 	//printf("mix_audio_result size %u\n", size);
-	memcpy(audio_buffer, data, size);
-	audio_buffer_ready = true;
-	audio_thread_overloaded = false;
+	audio_buffer_count ++;
+	if (audio_buffer_count == 1)
+	{
+		memcpy(audio_buffer, data, size);
+	}
+	else
+	{
+		memcpy(audio_buffer2, data, size);
+		audio_thread_overloaded = false;
+	}
 }
 
 void mix_audio( unsigned char *buffer, int howmuch )
 {
 	//printf("mix_audio buffer ready %u buffer size %u\n", audio_buffer_ready, howmuch);
-	if (audio_buffer_ready)
+	if (audio_buffer_count == 0)
 	{
-		audio_buffer_ready = false;
-		emscripten_call_worker(worker, "w_mix", NULL, 0, mix_audio_result, NULL);
-		memcpy(buffer, audio_buffer, howmuch);
+		memset(buffer, 0, howmuch);
+		return;
+	}
+	emscripten_call_worker(worker, "w_mix", NULL, 0, mix_audio_result, NULL);
+	memcpy(buffer, audio_buffer, howmuch);
+	audio_buffer_count --;
+	if (audio_buffer_count == 0)
+	{
 		audio_thread_overloaded = true;
 	}
 	else
 	{
-		memset(buffer, 0, howmuch);
+		unsigned char *t = audio_buffer;
+		audio_buffer = audio_buffer2;
+		audio_buffer2 = t;
 	}
 }
 
