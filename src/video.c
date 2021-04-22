@@ -18,6 +18,7 @@
  */
 #include "video.h"
 
+#include "loudness.h"
 #include "keyboard.h"
 #include "opentyr.h"
 #include "palette.h"
@@ -402,6 +403,10 @@ static void scale_and_flip( SDL_Surface *src_surface )
 
 	// Save output rect to be used by mouse functions
 	last_output_rect = dst_rect;
+
+	int counter = 10;
+	while (audio_thread_overloaded && counter-- > 0)
+		SDL_Delay(50);
 }
 
 /** Converts the given point from the game screen coordinates to the window

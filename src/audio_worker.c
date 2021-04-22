@@ -169,6 +169,7 @@ void mix_audio_result(char *data, int size, void *arg)
 	//printf("mix_audio_result size %u\n", size);
 	memcpy(audio_buffer, data, size);
 	audio_buffer_ready = true;
+	audio_thread_overloaded = false;
 }
 
 void mix_audio( unsigned char *buffer, int howmuch )
@@ -179,6 +180,7 @@ void mix_audio( unsigned char *buffer, int howmuch )
 		audio_buffer_ready = false;
 		emscripten_call_worker(worker, "w_mix", NULL, 0, mix_audio_result, NULL);
 		memcpy(buffer, audio_buffer, howmuch);
+		audio_thread_overloaded = true;
 	}
 	else
 	{

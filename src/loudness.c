@@ -32,6 +32,7 @@ bool music_stopped = true;
 unsigned int song_playing = 0;
 
 bool audio_disabled = false, music_disabled = false, samples_disabled = false;
+bool audio_thread_overloaded = false;
 
 /* SYN: These shouldn't be used outside this file. Hands off! */
 FILE *music_file = NULL;

@@ -41,6 +41,7 @@ extern float music_volume, sample_volume;
 extern unsigned int song_playing;
 
 extern bool audio_disabled, music_disabled, samples_disabled;
+extern bool audio_thread_overloaded;
 
 bool init_audio( bool xmas );
 void deinit_audio( void );
