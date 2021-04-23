@@ -253,6 +253,8 @@ bool load_opentyrian_config( void )
 	// defaults
 	fullscreen_display = -1;
 	set_scaler_by_name("None");
+	memcpy(keySettings, defaultKeySettings, sizeof(keySettings));
+	useNumericKeypad = true;
 	
 	Config *config = &opentyrian_config;
 	
@@ -289,9 +291,6 @@ bool load_opentyrian_config( void )
 		config_get_bool_option(section, "music disabled", &music_disabled);
 		config_get_bool_option(section, "samples disabled", &samples_disabled);
 	}
-
-	memcpy(keySettings, defaultKeySettings, sizeof(keySettings));
-	useNumericKeypad = true;
 
 	section = config_find_section(config, "keyboard", NULL);
 	if (section != NULL)
