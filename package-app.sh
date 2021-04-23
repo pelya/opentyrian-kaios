@@ -17,7 +17,7 @@ LEVEL=
 [ "$DIR" = "release" ] && LEVEL=-9
 [ "$DIR" = "debug" ] && sed -i 's/var sys_debug = 0;/var sys_debug = 1;/' sys.js
 
-cp -f *.webapp *.html *.js *.mem *.data *.wasm *.png *.jpg *.ico *.gif /var/www/html/
+cp -f *.html *.js *.mem *.data *.wasm *.png *.jpg *.ico *.gif ../
 
 rm -f application.zip
 zip $LEVEL application.zip *.webapp *.html *.js *.mem *.data *.wasm *.png *.jpg *.ico *.gif

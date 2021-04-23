@@ -11,4 +11,4 @@ source "$PATH_EMSDK/emsdk_env.sh"
 emmake make -j8 VERBOSE=1 || exit 1
 
 ./package-app.sh release
-./install-app.sh release
+#./install-app.sh release
