@@ -1,12 +1,12 @@
 #/data/
 
-/app.data
-/app.js
-/app.js.mem
-/appdata.js
-/appdata.data
-/audio.js
-/audio.js.mem
+#/app.data
+#/app.js
+#/app.js.mem
+#/appdata.js
+#/appdata.data
+#/audio.js
+#/audio.js.mem
 /debug
 /release
 
