@@ -91,7 +91,7 @@ LDLIBS ?=
 
 ifneq ($(EMSCRIPTEN),)
     SDL_CPPFLAGS := -s USE_SDL=2 \
-                    -s WASM=0 \
+                    -s WASM=1 \
                     -s ALLOW_MEMORY_GROWTH=1 \
                     -s INITIAL_MEMORY=8388608 \
                     -s NO_EXIT_RUNTIME=1 \
@@ -99,8 +99,10 @@ ifneq ($(EMSCRIPTEN),)
                     -s FORCE_FILESYSTEM=1 \
                     -s ASSERTIONS=0 \
                     -s ASYNCIFY=1 \
-                    -D KAIOS_SWAP_NAVIGATION_KEYS=1 \
-                    -D USE_AUDIO_WORKER=1
+
+                    #-D KAIOS_SWAP_NAVIGATION_KEYS=1 \
+                    #-D USE_AUDIO_WORKER=1
+
     SDL_LDFLAGS := $(SDL_CPPFLAGS)
     SDL_LDLIBS := -lidbfs.js --pre-js appdata.js
 else ifeq ($(WITH_NETWORK), true)
@@ -134,7 +136,7 @@ ALL_LDLIBS = -lm \
 ###
 
 .PHONY : all
-all : $(TARGET) $(TARGET_AUDIO)
+all : $(TARGET) # $(TARGET_AUDIO)
 
 .PHONY : debug
 debug : CPPFLAGS += -UNDEBUG
@@ -191,7 +193,7 @@ OBJS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.o)
 DEPS_AUDIO := $(SRCS_AUDIO:src/%.c=$(OBJDIR_AUDIO)/%.d)
 
 CPPFLAGS_AUDIO := -s USE_SDL=2 \
-                  -s WASM=0 \
+                  -s WASM=1 \
                   -s ALLOW_MEMORY_GROWTH=1 \
                   -s INITIAL_MEMORY=8388608 \
                   -s NO_EXIT_RUNTIME=1 \
