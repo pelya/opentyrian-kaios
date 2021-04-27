@@ -1,7 +1,7 @@
 {
   "name": "opentyrian",
   "short_name": "OpenTyrian",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Arcade-style vertical scrolling shooter, with story mode and weapon upgrades. Source code: https://github.com/pelya/opentyrian-kaios",
   "subtitle": "Vertical scrolling shooter",
   "locales": {
