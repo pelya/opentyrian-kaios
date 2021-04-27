@@ -96,6 +96,10 @@ bool init_audio( bool xmas )
 	
 	SDL_PauseAudio(0); // unpause
 	
+	load_music();
+	
+	JE_loadSndFile("tyrian.snd", xmas ? "voicesc.snd" : "voices.snd");
+	
 	return true;
 }
 

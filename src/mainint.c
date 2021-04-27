@@ -50,6 +50,7 @@
 #include "varz.h"
 #include "vga256d.h"
 #include "video.h"
+#include "xmas.h"
 
 #include <assert.h>
 #include <ctype.h>
@@ -1230,10 +1231,22 @@ JE_boolean JE_inGameSetup( void )
 					{
 						case 1:
 							music_disabled = !music_disabled;
+							if (audio_disabled)
+							{
+								audio_disabled = !enable_audio_prompt(true);
+								if (!audio_disabled)
+									init_audio(xmas);
+							}
 							set_volume(tyrMusicVolume, fxVolume);
 							break;
 						case 2:
 							samples_disabled = !samples_disabled;
+							if (audio_disabled)
+							{
+								audio_disabled = !enable_audio_prompt(true);
+								if (!audio_disabled)
+									init_audio(xmas);
+							}
 							set_volume(tyrMusicVolume, fxVolume);
 							break;
 						case 3:

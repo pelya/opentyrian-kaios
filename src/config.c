@@ -246,6 +246,8 @@ JE_SaveGameTemp saveTemp;
 
 JE_word editorLevel;   /*Initial value 800*/
 
+bool firstRun = false;
+
 Config opentyrian_config;  // implicitly initialized
 
 bool load_opentyrian_config( void )
@@ -290,6 +292,7 @@ bool load_opentyrian_config( void )
 	{
 		config_get_bool_option(section, "music disabled", &music_disabled);
 		config_get_bool_option(section, "samples disabled", &samples_disabled);
+		config_get_bool_option(section, "audio disabled", &audio_disabled);
 	}
 
 	section = config_find_section(config, "keyboard", NULL);
@@ -334,6 +337,7 @@ bool save_opentyrian_config( void )
 		exit(EXIT_FAILURE);  // out of memory
 	config_set_bool_option(section, "music disabled", music_disabled, NO_YES);
 	config_set_bool_option(section, "samples disabled", samples_disabled, NO_YES);
+	config_set_bool_option(section, "audio disabled", audio_disabled, NO_YES);
 
 	section = config_find_or_add_section(config, "keyboard", NULL);
 	if (section == NULL)
@@ -847,9 +851,11 @@ void JE_loadConfiguration( void )
 		gammaCorrection = 0;
 		processorType = 3;
 		gameSpeed = 4;
+		firstRun = true;
 	}
 	
-	load_opentyrian_config();
+	if (!load_opentyrian_config())
+		firstRun = true;
 	
 	if (tyrMusicVolume > 255)
 		tyrMusicVolume = 255;

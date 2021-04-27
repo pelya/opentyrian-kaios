@@ -26,6 +26,7 @@
 #include "keyboard.h"
 #include "loudness.h"
 #include "mainint.h"
+#include "menus.h"
 #include "mouse.h"
 #include "musmast.h"
 #include "network.h"
@@ -42,6 +43,7 @@
 #include "varz.h"
 #include "vga256d.h"
 #include "video.h"
+#include "xmas.h"
 
 #include <assert.h>
 
@@ -2694,6 +2696,12 @@ void JE_menuFunction( JE_byte select )
 			break;
 		case 4:
 			music_disabled = !music_disabled;
+			if (audio_disabled)
+			{
+				audio_disabled = !enable_audio_prompt(true);
+				if (!audio_disabled)
+					init_audio(xmas);
+			}
 			set_volume(tyrMusicVolume, fxVolume);
 			if (music_disabled)
 			{
@@ -2706,6 +2714,12 @@ void JE_menuFunction( JE_byte select )
 			break;
 		case 5:
 			samples_disabled = !samples_disabled;
+			if (audio_disabled)
+			{
+				audio_disabled = !enable_audio_prompt(true);
+				if (!audio_disabled)
+					init_audio(xmas);
+			}
 			set_volume(tyrMusicVolume, fxVolume);
 			break;
 		case 6:

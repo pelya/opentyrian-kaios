@@ -27,6 +27,7 @@ extern char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_
 bool select_gameplay( void );
 bool select_episode( void );
 bool select_difficulty( void );
+bool enable_audio_prompt( bool clearScreen );
 
 #endif /* MENUS_H */
 

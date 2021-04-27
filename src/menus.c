@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "episodes.h"
+#include "font.h"
 #include "fonthand.h"
 #include "keyboard.h"
 #include "nortsong.h"
@@ -30,6 +31,7 @@
 #include "sprite.h"
 #include "sys_kaios.h"
 #include "video.h"
+#include "xmas.h"
 
 char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_NAME_COUNT][26];
 
@@ -264,3 +266,75 @@ bool select_difficulty( void )
 	}
 }
 
+bool enable_audio_prompt( bool clearScreen )
+{
+	const char *prompt[] =
+	{
+		"Music and sounds require 512 MB RAM.",
+		"Enable music and sounds?",
+	};
+	const char *choice[] =
+	{
+		"Yes",
+		"No",
+	};
+	
+	if (clearScreen)
+	{
+		fade_black(10);
+		JE_clr256(VGAScreen);
+	}
+
+	set_palette(palettes[0], 0, 255);
+
+	for (uint i = 0; i < COUNTOF(prompt); ++i)
+		draw_font_hv(VGAScreen, 320 / 2, 85 + 15 * i, prompt[i], normal_font, centered, (i % 2) ? 2 : 4, -2);
+	
+	uint selection = 0;
+	
+	bool decided = false, quit = false;
+	while (!decided)
+	{
+		for (uint i = 0; i < COUNTOF(choice); ++i)
+			draw_font_hv(VGAScreen, 320 / 2 - 20 + 40 * i, 120, choice[i], normal_font, centered, 15, (selection == i) ? -2 : -4);
+		
+		JE_showVGA();
+		
+		JE_word temp = 0;
+		JE_textMenuWait(&temp, false);
+		
+		if (newkey)
+		{
+			switch (lastkey_scan)
+			{
+				case SDL_SCANCODE_LEFT:
+					if (selection == 0)
+						selection = 2;
+					selection--;
+					break;
+				case SDL_SCANCODE_RIGHT:
+					selection++;
+					selection %= 2;
+					break;
+					
+				case SDL_SCANCODE_RETURN:
+					decided = true;
+					break;
+				case SDL_SCANCODE_ESCAPE:
+				case SDL_SCANCODE_BACKSPACE:
+					decided = true;
+					quit = true;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	fade_black(10);
+
+	if (clearScreen)
+		set_palette(palettes[0], 0, 255);
+
+	return (selection == 0 && quit == false);
+}

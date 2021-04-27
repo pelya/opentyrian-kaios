@@ -139,6 +139,9 @@ static int audio_buffer_count = 0;
 
 void worker_init_audio( int samplerate, int samples, bool xmas )
 {
+	if (audio_disabled)
+		return;
+
 	char params[sizeof(Uint32) * 3] = "";
 	Uint32 d = 0;
 
@@ -208,6 +211,9 @@ void mix_audio( unsigned char *buffer, int howmuch )
 
 void play_song( unsigned int song_num )
 {
+	if (audio_disabled)
+		return;
+
 	Uint32 data[1] = { song_num };
 	emscripten_call_worker(worker, "w_play_song", (char *) data, sizeof(data), NULL, NULL);
 
@@ -217,11 +223,17 @@ void play_song( unsigned int song_num )
 
 void restart_song( void )
 {
+	if (audio_disabled)
+		return;
+
 	emscripten_call_worker(worker, "w_restart_song", NULL, 0, NULL, NULL);
 }
 
 void stop_song( void )
 {
+	if (audio_disabled)
+		return;
+
 	emscripten_call_worker(worker, "w_stop_song", NULL, 0, NULL, NULL);
 
 	playing = false;
@@ -229,13 +241,19 @@ void stop_song( void )
 
 void fade_song( void )
 {
+	if (audio_disabled)
+		return;
+
 	emscripten_call_worker(worker, "w_fade_song", NULL, 0, NULL, NULL);
 }
 
 void set_volume( unsigned int music, unsigned int sample )
 {
+	if (audio_disabled)
+		return;
 	if (worker == -1)
 		return;
+
 	if (music_disabled)
 		music = 0;
 	if (samples_disabled)
@@ -247,6 +265,9 @@ void set_volume( unsigned int music, unsigned int sample )
 
 void JE_multiSamplePlay(JE_byte samplenum, JE_byte chan, JE_byte vol)
 {
+	if (audio_disabled)
+		return;
+
 	Uint32 data[3] = { samplenum, chan, vol };
 	emscripten_call_worker(worker, "w_play_sample", (char *) data, sizeof(data), NULL, NULL);
 }

@@ -30,6 +30,7 @@
 #include "keyboard.h"
 #include "loudness.h"
 #include "mainint.h"
+#include "menus.h"
 #include "mtrand.h"
 #include "musmast.h"
 #include "network.h"
@@ -365,6 +366,11 @@ int main( int argc, const char *argv[] )
 	JE_loadPals();
 	JE_loadMainShapeTables(xmas ? "tyrianc.shp" : "tyrian.shp");
 
+	if (firstRun)
+	{
+		audio_disabled = !enable_audio_prompt(false);
+	}
+
 	if (xmas && !xmas_prompt())
 	{
 		xmas = false;
@@ -384,10 +390,6 @@ int main( int argc, const char *argv[] )
 		printf("initializing SDL audio...\n");
 
 		init_audio(xmas);
-
-		load_music();
-
-		JE_loadSndFile("tyrian.snd", xmas ? "voicesc.snd" : "voices.snd");
 	}
 	else
 	{
