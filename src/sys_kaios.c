@@ -164,7 +164,7 @@ void sys_hide_splash_image(void)
 #endif // EMSCRIPTEN
 }
 
-extern void sys_show_fullscreen_advertisement(void)
+void sys_show_fullscreen_advertisement(void)
 {
 #ifdef EMSCRIPTEN
 	EM_ASM({
@@ -173,4 +173,13 @@ extern void sys_show_fullscreen_advertisement(void)
 		}
 	});
 #endif // EMSCRIPTEN
+}
+
+int sys_get_device_ram_size_megabytes(void)
+{
+	int size = 0;
+#ifdef EMSCRIPTEN
+	size = EM_ASM_INT( return sys_device_ram_size_mb; );
+#endif // EMSCRIPTEN
+	return size;
 }

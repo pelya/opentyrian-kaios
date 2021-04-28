@@ -85,4 +85,10 @@ extern void sys_hide_splash_image(void);
 // it should be accessible from somewhere in the app, like settings dialog.
 extern void sys_show_fullscreen_advertisement(void);
 
+// Return device RAM size in megabytes.
+// Your manifest.webapp must include following declaration,
+// otherwise this function returns 0:
+// "type": "privileged", "permissions": { "feature-detection": {} }
+extern int sys_get_device_ram_size_megabytes(void);
+
 #endif

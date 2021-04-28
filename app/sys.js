@@ -2,11 +2,11 @@
 var sys_fs_init_is_done = 0;
 var sys_fs_sync_is_done = 1;
 var sys_screen_wake_lock = null;
+var sys_device_ram_size_mb = 0;
 // Debug text window
 var sys_debug = 0;
 // KaiAds integration
 var sys_preloaded_advertisement = false;
-
 
 window.onerror = function (errorMsg) {
   alert("Error occured: " + errorMsg);
@@ -115,3 +115,14 @@ setTimeout(function() {
     });
   }
 }, 8000);
+
+try {
+  navigator.getFeature('hardware.memory').then((memOnDevice) => {
+    Module.print("Device RAM size: " + memOnDevice);
+    sys_device_ram_size_mb = parseInt(memOnDevice);
+  });
+} catch(e) {
+  Module.print("Cannot get device RAM size");
+}
+
+var sys_device_ram_size_mb = 0;

@@ -278,7 +278,11 @@ bool enable_audio_prompt( bool clearScreen )
 		"Yes",
 		"No",
 	};
-	
+
+	int ramSize = sys_get_device_ram_size_megabytes();
+	if (ramSize > 0)
+		return (ramSize >= 500);
+
 	if (clearScreen)
 	{
 		fade_black(10);
