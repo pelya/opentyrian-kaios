@@ -124,5 +124,3 @@ try {
 } catch(e) {
   Module.print("Cannot get device RAM size");
 }
-
-var sys_device_ram_size_mb = 0;
