@@ -95,7 +95,7 @@ ifneq ($(EMSCRIPTEN),)
                     -s ALLOW_MEMORY_GROWTH=1 \
                     -s INITIAL_MEMORY=8388608 \
                     -s NO_EXIT_RUNTIME=1 \
-                    -s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
+                    -s EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
                     -s FORCE_FILESYSTEM=1 \
                     -s ASSERTIONS=0 \
                     -s ASYNCIFY=1 \
@@ -195,7 +195,7 @@ CPPFLAGS_AUDIO := -s USE_SDL=2 \
                   -s ALLOW_MEMORY_GROWTH=1 \
                   -s INITIAL_MEMORY=8388608 \
                   -s NO_EXIT_RUNTIME=1 \
-                  -s EXTRA_EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
+                  -s EXPORTED_RUNTIME_METHODS=['FS','UTF8ToString'] \
                   -s FORCE_FILESYSTEM=1 \
                   -s ASSERTIONS=0 \
                   -s BUILD_AS_WORKER=1 \
