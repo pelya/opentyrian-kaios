@@ -86,6 +86,7 @@ void service_wait_delay( void )
 		SDL_Delay(SDL_GetTicks() - target > SDL_POLL_INTERVAL ? SDL_POLL_INTERVAL : SDL_GetTicks() - target);
 		service_SDL_events(false);
 	}
+	service_SDL_events(false);
 }
 
 void wait_delayorinput( JE_boolean keyboard, JE_boolean mouse, JE_boolean joystick )
