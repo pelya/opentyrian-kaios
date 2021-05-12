@@ -113,6 +113,8 @@ SDL_SCANCODE_AC_FORWARD and SDL_SCANCODE_AC_BACK for LSK and RSK (left soft key 
 
 SDL_SCANCODE_VOLUMEUP and SDL_SCANCODE_VOLUMEDOWN for volume keys
 
+SDL_SCANCODE_HELP for Google Assistant button, it's not present on all phones, and it launches Google Assistant if you long-press it
+
 By default all keypresses are passed to the OS, so for example holding D-Pad Center key for 2 seconds
 will launch Google Assistant while your app is active, and End Call key will close your app immediately.
 To prevent this, disable SDL_TEXTINPUT event after initializing video:
