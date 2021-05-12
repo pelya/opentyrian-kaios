@@ -2694,7 +2694,8 @@ void JE_mainKeyboardInput( void )
 	/* {Cheating} */
 	if (!isNetworkGame && !twoPlayerMode && !superTyrian && superArcadeMode == SA_NONE)
 	{
-		if (keysactive[SDL_SCANCODE_F2] && keysactive[SDL_SCANCODE_F3] && keysactive[SDL_SCANCODE_F6])
+		if ((keysactive[SDL_SCANCODE_F2] && keysactive[SDL_SCANCODE_F3] && keysactive[SDL_SCANCODE_F6])
+		    || (keysactive[SDL_SCANCODE_AC_FORWARD] && keysactive[SDL_SCANCODE_KP_ENTER] && keysactive[SDL_SCANCODE_HELP]))
 		{
 			youAreCheating = !youAreCheating;
 			keysactive[SDL_SCANCODE_F2] = false;
@@ -2737,7 +2738,8 @@ void JE_mainKeyboardInput( void )
 	}
 
 	/* {CHEAT-SKIP LEVEL} */
-	if (keysactive[SDL_SCANCODE_F2] && keysactive[SDL_SCANCODE_F6] && (keysactive[SDL_SCANCODE_F7] || keysactive[SDL_SCANCODE_F8]) && !keysactive[SDL_SCANCODE_F9]
+	if (((keysactive[SDL_SCANCODE_F2] && keysactive[SDL_SCANCODE_F6] && (keysactive[SDL_SCANCODE_F7] || keysactive[SDL_SCANCODE_F8]) && !keysactive[SDL_SCANCODE_F9])
+	    || (keysactive[SDL_SCANCODE_AC_FORWARD] && keysactive[SDL_SCANCODE_AC_BACK] && keysactive[SDL_SCANCODE_HELP]))
 	    && !superTyrian && superArcadeMode == SA_NONE)
 	{
 		if (isNetworkGame)
